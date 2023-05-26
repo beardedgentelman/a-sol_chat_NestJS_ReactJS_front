@@ -1,0 +1,49 @@
+{
+  "extends": ["react-app", "react-app/jest"],
+  "plugins": ["react", "simple-import-sort", "prettier"],
+  "settings": {
+    "import/resolver": {
+      "jsconfig": {
+        "config": "tsconfig.json",
+        "extensions": [".js", ".jsx"]
+      }
+    }
+  },
+  "rules": {
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
+    "prettier/prettier": 2,
+    "import/order": [
+      2,
+      {
+        "newlines-between": "always-and-inside-groups"
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["*.js", "*.jsx", "*.ts", "*.tsx"],
+      "rules": {
+        "simple-import-sort/imports": [
+          "error",
+          {
+            "groups": [
+              // Packages `react` related packages come first.
+              ["^react", "^@?\\w"],
+              // Internal packages.
+              ["^(@|components)(/.*|$)"],
+              // Side effect imports.
+              ["^\\u0000"],
+              // Parent imports. Put `..` last.
+              ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
+              // Other relative imports. Put same-folder imports and `.` last.
+              ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"],
+              // Style imports.
+              ["^.+\\.?(css)$"]
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

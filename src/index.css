@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Varta:wght@400;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Varta:wght@400;700&display=swap');
 
 :root {
   --primary-color: #dbdb2c;
@@ -41,10 +41,10 @@ body {
   line-height: 1;
 }
 body {
-  font-family: "Varta", sans-serif;
+  font-family: 'Varta', sans-serif;
   font-size: 16px;
 }
-.wrapper {
+.App {
   overflow: visible;
   display: flex;
   flex-direction: column;
@@ -53,7 +53,7 @@ body {
 .main {
   flex: 1 1 auto;
 }
-[class*="__container"] {
+[class*='__container'] {
   max-width: 1200px;
   margin: 0px auto;
   padding: 0 10px 0 10px;

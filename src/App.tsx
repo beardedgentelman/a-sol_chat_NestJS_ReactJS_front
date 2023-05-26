@@ -1,5 +1,11 @@
+import Registration from 'pages/Registration/Registration'
+
 function App() {
-  return <div className='App'></div>;
+  return (
+    <div className='App'>
+      <Registration />
+    </div>
+  )
 }
 
-export default App;
+export default App
