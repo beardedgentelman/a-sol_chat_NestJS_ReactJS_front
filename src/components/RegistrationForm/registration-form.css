@@ -19,20 +19,88 @@
 }
 .form__field {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   width: 100%;
-  height: 2rem;
-  background-color: #fff;
+  padding: 0.5rem;
+  background-color: #f4fdff;
+  border-radius: 8px;
+}
+.form span {
+  color: var(--secondary-color);
+  display: inline-block;
+}
+.form__field-eye {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: normal;
+  cursor: pointer;
+}
+.form__avatar-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.form__avatar-field_wrapper {
+  width: 80px;
+  height: 80px;
+  border-radius: 100%;
+  overflow: hidden;
+}
+.form__avatar-field_wrapper img {
+  width: 100%;
 }
 .form__field label {
   position: absolute;
   top: 50%;
-  left: 3%;
-  transform: translateY(-50%);
+  left: 4%;
+  transform: translateY(-30%);
+  cursor: text;
 }
 .form__field input {
   width: 100%;
   height: 100%;
-  padding: 0.2rem 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #f4fdff;
+  outline: none;
+}
+.form button input[type='file'] {
+  position: relative;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  visibility: hidden;
+  z-index: -1;
+}
+.form__avatar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  padding: 0.5rem 1rem;
+  margin-right: auto;
+  cursor: pointer;
+  background: var(--primary-color);
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+.form button:hover {
+  background: #eda619;
+}
+.form__submit {
+  width: 100%;
+  margin-inline: auto;
+  padding: 0.5rem 1rem;
+  margin-left: auto;
+  cursor: pointer;
+  background: var(--primary-color);
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+.form__submit:hover {
+  background: #eda619;
 }
 
 @keyframes bg_go {

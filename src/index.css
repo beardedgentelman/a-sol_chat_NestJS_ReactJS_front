@@ -43,6 +43,7 @@ body {
 body {
   font-family: 'Varta', sans-serif;
   font-size: 16px;
+  line-height: 1;
 }
 .App {
   overflow: visible;
