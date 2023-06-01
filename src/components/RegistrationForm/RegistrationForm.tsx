@@ -1,46 +1,57 @@
+import { useAppDispatch } from 'hooks/redux'
 import { useRef, useState } from 'react'
-import { IForm } from 'types/types'
+
+import { RegistrationSlice } from 'store/reducers/RegistrationSlice'
+import { IRegistration, IRegistrationError } from 'types/types'
 
 import { formValidation } from './validation'
 
 import './registration-form.css'
 
 const RegistrationForm = () => {
-  const [fileName, setFileName] = useState('Add avatar +')
-  const [miniature, setMiniature] = useState('')
-  const [formErrors, setFormErrors] = useState<any>({})
+  // TODO: replace to update user form
+  // const [fileName, setFileName] = useState('Add avatar +')
+  // const [miniature, setMiniature] = useState('')
+  const [formErrors, setFormErrors] = useState<IRegistrationError>({})
 
   const passwordRef = useRef<HTMLInputElement>(null)
-  const fileRef = useRef<HTMLInputElement>(null)
+  // TODO: replace to update user form
+  // const fileRef = useRef<HTMLInputElement>(null)
 
-  const handleFileChange = () => {
-    if (fileRef.current && fileRef.current.files && fileRef.current.files.length > 0) {
-      setFileName(fileRef.current?.files[0].name)
-      setMiniature(URL.createObjectURL(fileRef.current.files[0]))
-    } else {
-      return
-    }
-  }
+  const { postRegistration } = RegistrationSlice.actions
+  const dispatch = useAppDispatch()
+
+  // TODO: replace to update user form
+  // const handleFileChange = () => {
+  //   if (fileRef.current && fileRef.current.files && fileRef.current.files.length > 0) {
+  //     setFileName(fileRef.current?.files[0].name)
+  //     setMiniature(URL.createObjectURL(fileRef.current.files[0]))
+  //   }
+  // }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     const formData = new FormData(e.currentTarget)
-    const formValues: IForm = {
+    const formValues: IRegistration = {
+      username: '',
       email: '',
       password: ''
     }
 
     formData.forEach((value, key) => {
-      if (key === 'file' && value instanceof File && value.size === 0) {
-        return
-      }
-      formValues[key as keyof IForm] = value as any
+      // TODO: replace to update user form
+      // if (key === 'file' && value instanceof File && value.size === 0) {
+      //   return
+      // }
+      formValues[key as keyof IRegistration] = value as string
     })
 
     try {
       await formValidation.validate(formValues, { abortEarly: false })
       setFormErrors({})
+
+      dispatch(postRegistration(formValues))
     } catch (err: any) {
       if (err.name === 'ValidationError') {
         const errors = err.inner.reduce((acc: any, curr: any) => {
@@ -48,13 +59,17 @@ const RegistrationForm = () => {
           return acc
         }, {})
         setFormErrors(errors)
-        console.log(formErrors)
       }
     }
   }
 
   return (
     <form className='form' onSubmit={handleSubmit}>
+      <div className='form__field'>
+        <input type='text' name='username' id='username' placeholder='Name' />
+      </div>
+      {formErrors.username && <span className='form__error'>{formErrors.username}</span>}
+
       <div className='form__field'>
         <input type='email' name='email' id='email' placeholder='Email' />
       </div>
@@ -72,7 +87,13 @@ const RegistrationForm = () => {
       </div>
       {formErrors.password && <span className='form__error'>{formErrors.password}</span>}
 
-      <div className='form__avatar-field'>
+      <div className='form__field'>
+        <input type='password' name='confirmPassword' id='confirmPassword' placeholder='Confirm password' />
+      </div>
+      {formErrors.confirmPassword && <span className='form__error'>{formErrors.confirmPassword}</span>}
+
+      {/* TODO:Replace to user update form */}
+      {/* <div className='form__avatar-field'>
         <button
           className='form__avatar-btn'
           type='button'
@@ -89,7 +110,7 @@ const RegistrationForm = () => {
           </div>
         )}
       </div>
-      {formErrors.file && <span className='form__error'>{formErrors.file}</span>}
+      {formErrors.file && <span className='form__error'>{formErrors.file}</span>} */}
 
       <input type='submit' className='form__submit' placeholder='Submit' />
     </form>
