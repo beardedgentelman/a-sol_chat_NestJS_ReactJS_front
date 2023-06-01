@@ -1,42 +1,45 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { IRegistration } from 'types/types'
+import { createSlice } from '@reduxjs/toolkit'
+import { IAuthState } from 'types/types'
+
+import { registrationPost } from './ActionCreators'
 
 interface RegistrationState {
-  form: IRegistration
+  authState: IAuthState
   isLoading: boolean
-  error: string
+  error: any
 }
 
 const initialState: RegistrationState = {
-  form: {
-    username: '',
-    email: '',
-    password: ''
+  authState: {
+    isAuth: false,
+    user: null
   },
   isLoading: false,
-  error: '',
-  
+  error: ''
 }
 
 export const RegistrationSlice = createSlice({
   name: 'registration',
   initialState,
   reducers: {},
-  extraReducers {
-    postRegistration()
-  },
-    postRegistration(state, action: PayloadAction<IRegistration>) {
-      state.isLoading = true
-    },
-    postRegistrationSuccess(state, action: PayloadAction<string>) {
-      state.isLoading = false
-      state.error = ''
-      state.token = action.payload
-    },
-    postRegistrationError(state, action: PayloadAction<string>) {
-      state.isLoading = false
-      state.error = action.payload
-    }
+  extraReducers: builder => {
+    builder
+      .addCase(registrationPost.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.error = ''
+        state.authState = {
+          isAuth: true,
+          user: action.payload
+        }
+      })
+      .addCase(registrationPost.pending, state => {
+        state.isLoading = true
+      })
+      .addCase(registrationPost.rejected, (state, action) => {
+        state.isLoading = false
+        state.error = action.error.message
+        state.authState = initialState.authState
+      })
   }
 })
 

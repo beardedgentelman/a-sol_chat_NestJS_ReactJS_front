@@ -1,8 +1,10 @@
-import { useAppDispatch } from 'hooks/redux'
 import { useRef, useState } from 'react'
 
-import { RegistrationSlice } from 'store/reducers/RegistrationSlice'
 import { IRegistration, IRegistrationError } from 'types/types'
+
+import { useAppDispatch, useAppSelector } from 'hooks/redux'
+
+import { registrationPost } from 'store/reducers/ActionCreators'
 
 import { formValidation } from './validation'
 
@@ -12,14 +14,15 @@ const RegistrationForm = () => {
   // TODO: replace to update user form
   // const [fileName, setFileName] = useState('Add avatar +')
   // const [miniature, setMiniature] = useState('')
-  const [formErrors, setFormErrors] = useState<IRegistrationError>({})
+  const [formErrorsValidation, setFormErrorsValidation] = useState<IRegistrationError>({})
 
+  const dispatch = useAppDispatch()
+  const { authState, isLoading, error } = useAppSelector(state => state.registrationReducer)
+
+  const formRef = useRef<HTMLFormElement>(null)
   const passwordRef = useRef<HTMLInputElement>(null)
   // TODO: replace to update user form
   // const fileRef = useRef<HTMLInputElement>(null)
-
-  const { postRegistration } = RegistrationSlice.actions
-  const dispatch = useAppDispatch()
 
   // TODO: replace to update user form
   // const handleFileChange = () => {
@@ -36,7 +39,8 @@ const RegistrationForm = () => {
     const formValues: IRegistration = {
       username: '',
       email: '',
-      password: ''
+      password: '',
+      confirmPassword: ''
     }
 
     formData.forEach((value, key) => {
@@ -49,31 +53,35 @@ const RegistrationForm = () => {
 
     try {
       await formValidation.validate(formValues, { abortEarly: false })
-      setFormErrors({})
-
-      dispatch(postRegistration(formValues))
+      setFormErrorsValidation({})
+      delete formValues.confirmPassword
+      dispatch(registrationPost(formValues))
+      if (!error && !isLoading && formRef.current !== null) {
+        formRef.current.reset()
+      }
     } catch (err: any) {
       if (err.name === 'ValidationError') {
-        const errors = err.inner.reduce((acc: any, curr: any) => {
+        const validationErrors = err.inner.reduce((acc: any, curr: any) => {
           acc[curr.path] = curr.message
           return acc
         }, {})
-        setFormErrors(errors)
+        setFormErrorsValidation(validationErrors)
       }
     }
   }
 
   return (
-    <form className='form' onSubmit={handleSubmit}>
+    <form ref={formRef} className='form' onSubmit={handleSubmit}>
+      {!error ? <h1 className='form__title'>Registration</h1> : <span className='form__error-server'>{error}</span>}
       <div className='form__field'>
         <input type='text' name='username' id='username' placeholder='Name' />
       </div>
-      {formErrors.username && <span className='form__error'>{formErrors.username}</span>}
+      {formErrorsValidation.username && <span className='form__error'>{formErrorsValidation.username}</span>}
 
       <div className='form__field'>
         <input type='email' name='email' id='email' placeholder='Email' />
       </div>
-      {formErrors.email && <span className='form__error'>{formErrors.email}</span>}
+      {formErrorsValidation.email && <span className='form__error'>{formErrorsValidation.email}</span>}
 
       <div className='form__field'>
         <input ref={passwordRef} type='password' name='password' id='password' placeholder='Password' />
@@ -85,12 +93,14 @@ const RegistrationForm = () => {
           &#128065;
         </p>
       </div>
-      {formErrors.password && <span className='form__error'>{formErrors.password}</span>}
+      {formErrorsValidation.password && <span className='form__error'>{formErrorsValidation.password}</span>}
 
       <div className='form__field'>
         <input type='password' name='confirmPassword' id='confirmPassword' placeholder='Confirm password' />
       </div>
-      {formErrors.confirmPassword && <span className='form__error'>{formErrors.confirmPassword}</span>}
+      {formErrorsValidation.confirmPassword && (
+        <span className='form__error'>{formErrorsValidation.confirmPassword}</span>
+      )}
 
       {/* TODO:Replace to user update form */}
       {/* <div className='form__avatar-field'>
@@ -110,9 +120,11 @@ const RegistrationForm = () => {
           </div>
         )}
       </div>
-      {formErrors.file && <span className='form__error'>{formErrors.file}</span>} */}
+      {formErrorsValidation.file && <span className='form__error'>{formErrorsValidation.file}</span>} */}
 
-      <input type='submit' className='form__submit' placeholder='Submit' />
+      <button type='submit' className='form__submit'>
+        {!isLoading ? <span>Submit</span> : <span className='form__loading'></span>}
+      </button>
     </form>
   )
 }

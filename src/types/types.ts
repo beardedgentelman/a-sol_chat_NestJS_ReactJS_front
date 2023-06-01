@@ -2,6 +2,7 @@ export interface IRegistration {
   username: string
   email: string
   password: string
+  confirmPassword?: string
 }
 
 export interface IRegistrationError {
@@ -11,11 +12,13 @@ export interface IRegistrationError {
   confirmPassword?: string
 }
 
-export interface IAuthState {
-  token: null | string
-  user: null
-}
-
 export interface IUser {
   username: string
+  email: string
+  userAvatar?: string
+}
+
+export interface IAuthState {
+  isAuth: boolean
+  user: IUser | null
 }

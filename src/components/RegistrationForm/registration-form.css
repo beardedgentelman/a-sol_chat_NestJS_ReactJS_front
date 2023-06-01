@@ -17,6 +17,12 @@
   gap: 2rem;
   animation: bg_go 6s infinite;
 }
+.form__title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--text-color-light);
+}
 .form__field {
   position: relative;
   display: flex;
@@ -27,16 +33,22 @@
   background-color: #f4fdff;
   border-radius: 8px;
 }
-.form span {
+.form__error {
   display: inline-block;
   width: fit-content;
   font-size: 12px;
   line-height: normal;
-  background-color: var(--secondary-color);
+  background-color: var(--error-color);
   color: var(--text-color-light);
   padding: 0.2rem 0.5rem;
   border-radius: 8px;
   animation: error 0.2s 0.05s 1 forwards;
+}
+.form__error-server {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--error-color);
+  text-align: center;
 }
 .form__field-eye {
   display: flex;
@@ -109,6 +121,21 @@
 .form__submit:hover {
   background: #eda619;
 }
+.form__loading {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+}
+.form__loading:after {
+  content: ' ';
+  display: block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--text-color);
+  border-color: var(--text-color) transparent var(--text-color) transparent;
+  animation: loading 1.2s linear infinite;
+}
 
 @keyframes error {
   0% {
@@ -125,5 +152,13 @@
   }
   100% {
     transform: rotate(0deg);
+  }
+}
+@keyframes loading {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }

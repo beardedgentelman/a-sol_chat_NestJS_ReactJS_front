@@ -2,7 +2,7 @@
 
 :root {
   --primary-color: #dbdb2c;
-  --secondary-color: #dc4545;
+  --error-color: #dc4545;
   --text-color: #04031f;
   --text-color-light: #edeaea;
 }
