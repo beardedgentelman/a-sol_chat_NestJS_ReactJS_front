@@ -5,12 +5,7 @@ export interface IRegistration {
   confirmPassword?: string
 }
 
-export interface IRegistrationError {
-  username?: string
-  email?: string
-  password?: string
-  confirmPassword?: string
-}
+export type IRegistrationError = Partial<Required<IRegistration>>
 
 export interface IUser {
   username: string

@@ -1,12 +1,14 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
-import Registration from 'pages/Registration/Registration'
+import RegistrationPage from 'pages/RegistrationPage/RegistrationPage'
+import ChatsPage from 'pages/ChatsPage/ChatsPage'
 
 function App() {
   return (
     <div className='App'>
       <Routes>
-        <Route path='/' element={<Navigate to='/registration' replace />} />
-        <Route path='/registration' element={<Registration />}></Route>
+        <Route path='/chats' element={<ChatsPage />}></Route>
+        {/* <Route path='/' element={<Navigate to='/registration' replace />} />
+        <Route path='/registration' element={<RegistrationPage />}></Route> */}
       </Routes>
     </div>
   )

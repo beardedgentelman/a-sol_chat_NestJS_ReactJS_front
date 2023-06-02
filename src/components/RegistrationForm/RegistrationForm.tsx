@@ -56,9 +56,12 @@ const RegistrationForm = () => {
       setFormErrorsValidation({})
       delete formValues.confirmPassword
       dispatch(registrationPost(formValues))
-      if (!error && !isLoading && formRef.current !== null) {
-        formRef.current.reset()
-      }
+        .then(() => {
+          if (!error && !isLoading && formRef.current !== null) {
+            formRef.current.reset()
+          }
+        })
+        .then()
     } catch (err: any) {
       if (err.name === 'ValidationError') {
         const validationErrors = err.inner.reduce((acc: any, curr: any) => {
