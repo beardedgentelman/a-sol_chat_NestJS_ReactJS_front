@@ -85,42 +85,6 @@
   background-color: #f4fdff;
   outline: none;
 }
-.form button input[type='file'] {
-  position: relative;
-  width: 0;
-  height: 0;
-  opacity: 0;
-  visibility: hidden;
-  z-index: -1;
-}
-.form__avatar-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: fit-content;
-  padding: 0.5rem 1rem;
-  margin-right: auto;
-  cursor: pointer;
-  background: var(--primary-color);
-  border-radius: 8px;
-  transition: all 0.3s;
-}
-.form button:hover {
-  background: #eda619;
-}
-.form__submit {
-  width: 100%;
-  margin-inline: auto;
-  padding: 0.5rem 1rem;
-  margin-left: auto;
-  cursor: pointer;
-  background: var(--primary-color);
-  border-radius: 8px;
-  transition: all 0.3s;
-}
-.form__submit:hover {
-  background: #eda619;
-}
 .form__loading {
   display: inline-block;
   width: 16px;

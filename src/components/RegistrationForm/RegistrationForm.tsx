@@ -1,10 +1,14 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { IRegistration, IRegistrationError } from 'types/types'
 
 import { useAppDispatch, useAppSelector } from 'hooks/redux'
 
 import { registrationPost } from 'store/reducers/ActionCreators'
+
+import { useNavigate } from 'react-router-dom'
+
+import BtnMain from 'components/ui/BtnMain/BtnMain'
 
 import { formValidation } from './validation'
 
@@ -14,13 +18,22 @@ const RegistrationForm = () => {
   // TODO: replace to update user form
   // const [fileName, setFileName] = useState('Add avatar +')
   // const [miniature, setMiniature] = useState('')
+  const [formDispatched, setFormDispatched] = useState(false)
   const [formErrorsValidation, setFormErrorsValidation] = useState<IRegistrationError>({})
 
   const dispatch = useAppDispatch()
-  const { authState, isLoading, error } = useAppSelector(state => state.registrationReducer)
+  const { isLoading, error } = useAppSelector(state => state.authReducer)
 
   const formRef = useRef<HTMLFormElement>(null)
   const passwordRef = useRef<HTMLInputElement>(null)
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (formDispatched && !isLoading && !error) {
+      navigate('/chats')
+    }
+  }, [formDispatched, isLoading, error, navigate])
   // TODO: replace to update user form
   // const fileRef = useRef<HTMLInputElement>(null)
 
@@ -52,16 +65,17 @@ const RegistrationForm = () => {
     })
 
     try {
-      await formValidation.validate(formValues, { abortEarly: false })
-      setFormErrorsValidation({})
-      delete formValues.confirmPassword
-      dispatch(registrationPost(formValues))
+      await formValidation
+        .validate(formValues, { abortEarly: false })
+        .then(() => setFormErrorsValidation({}))
+        .then(() => delete formValues.confirmPassword)
+        .then(() => dispatch(registrationPost(formValues)))
         .then(() => {
-          if (!error && !isLoading && formRef.current !== null) {
+          if (formRef.current !== null) {
             formRef.current.reset()
           }
+          setFormDispatched(true)
         })
-        .then()
     } catch (err: any) {
       if (err.name === 'ValidationError') {
         const validationErrors = err.inner.reduce((acc: any, curr: any) => {
@@ -125,9 +139,9 @@ const RegistrationForm = () => {
       </div>
       {formErrorsValidation.file && <span className='form__error'>{formErrorsValidation.file}</span>} */}
 
-      <button type='submit' className='form__submit'>
+      <BtnMain type='submit' className='form__submit' disabled={isLoading && true}>
         {!isLoading ? <span>Submit</span> : <span className='form__loading'></span>}
-      </button>
+      </BtnMain>
     </form>
   )
 }

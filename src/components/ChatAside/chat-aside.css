@@ -1,0 +1,19 @@
+.chats-aside {
+  display: flex;
+  width: 20vw;
+  min-height: 100vh;
+  height: 100%;
+  background-color: #252525;
+  padding: 1rem;
+}
+.chats-aside__chats {
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  background-color: #1d1d1d;
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+.chats-aside__chats-list {
+  flex: 1 1 auto;
+}

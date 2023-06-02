@@ -11,7 +11,6 @@ interface RegistrationState {
 
 const initialState: RegistrationState = {
   authState: {
-    isAuth: false,
     user: null
   },
   isLoading: false,
@@ -28,7 +27,6 @@ export const RegistrationSlice = createSlice({
         state.isLoading = false
         state.error = ''
         state.authState = {
-          isAuth: true,
           user: action.payload
         }
       })
