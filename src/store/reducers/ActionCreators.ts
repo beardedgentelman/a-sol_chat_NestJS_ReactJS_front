@@ -9,7 +9,10 @@ export const registrationPost = createAsyncThunk('auth/registration', async (bod
     return response.data.user
   } catch (error: any) {
     localStorage.clear()
-    const errorMessage = error.response.data.message
-    throw errorMessage
+    if (error.response) {
+      throw error.response.data.message
+    } else {
+      throw error.message
+    }
   }
 })

@@ -14,6 +14,5 @@ export interface IUser {
 }
 
 export interface IAuthState {
-  isAuth: boolean
   user: IUser | null
 }

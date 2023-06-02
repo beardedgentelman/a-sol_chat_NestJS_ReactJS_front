@@ -1,14 +1,18 @@
-import { Navigate, Route, Routes } from 'react-router-dom'
-import RegistrationPage from 'pages/RegistrationPage/RegistrationPage'
 import ChatsPage from 'pages/ChatsPage/ChatsPage'
+import RegistrationPage from 'pages/RegistrationPage/RegistrationPage'
+import { Navigate, Route, Routes } from 'react-router-dom'
 
 function App() {
   return (
     <div className='App'>
       <Routes>
-        <Route path='/chats' element={<ChatsPage />}></Route>
-        {/* <Route path='/' element={<Navigate to='/registration' replace />} />
-        <Route path='/registration' element={<RegistrationPage />}></Route> */}
+        {/* TODO: Make private routes */}
+
+        {/* <Route element={<AuthRoute />}> */}
+        <Route path='/chats' element={<ChatsPage />} />
+        {/* </Route> */}
+        <Route path='/' element={<Navigate to='/registration' replace />} />
+        <Route path='/registration' element={<RegistrationPage />} />
       </Routes>
     </div>
   )

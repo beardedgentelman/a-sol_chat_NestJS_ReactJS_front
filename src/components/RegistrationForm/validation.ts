@@ -1,8 +1,13 @@
 import * as Yup from 'yup'
 
 export const formValidation = Yup.object().shape({
-  username: Yup.string(),
-  email: Yup.string().label('email').required('Email is required').email('Invalid email'),
+  username: Yup.string().label('username').required('Name is required'),
+  email: Yup.string()
+    .label('email')
+    .when('username', {
+      is: (username: string) => !!username,
+      then: () => Yup.string().required('Email is required').email('Invalid email')
+    }),
   password: Yup.string()
     .label('password')
     .when('email', {
