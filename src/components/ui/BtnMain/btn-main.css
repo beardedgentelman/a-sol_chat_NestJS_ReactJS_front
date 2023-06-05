@@ -1,0 +1,13 @@
+.btn-main {
+  width: 100%;
+  margin-inline: auto;
+  padding: 0.5rem 1rem;
+  margin-left: auto;
+  cursor: pointer;
+  background: var(--primary-color);
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+.btn-main:hover {
+  background: #eda619;
+}
