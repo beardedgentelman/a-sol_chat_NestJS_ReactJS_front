@@ -15,4 +15,11 @@ export interface IUser {
 
 export interface IAuthState {
   user: IUser | null
+  token: string
+}
+
+export interface IMessageState {
+  text?: string
+  user: IUser | null
+  date: string
 }

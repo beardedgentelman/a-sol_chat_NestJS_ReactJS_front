@@ -2,13 +2,11 @@ import { useEffect, useRef, useState } from 'react'
 
 import { IRegistration, IRegistrationError } from 'types/types'
 
-import { useAppDispatch, useAppSelector } from 'hooks/redux'
-
-import { registrationPost } from 'store/reducers/ActionCreators'
-
 import { useNavigate } from 'react-router-dom'
 
 import BtnMain from 'components/ui/BtnMain/BtnMain'
+
+import { useRegistrationMutation } from 'services/authService'
 
 import { formValidation } from './validation'
 
@@ -21,8 +19,7 @@ const RegistrationForm = () => {
   const [formDispatched, setFormDispatched] = useState(false)
   const [formErrorsValidation, setFormErrorsValidation] = useState<IRegistrationError>({})
 
-  const dispatch = useAppDispatch()
-  const { isLoading, error } = useAppSelector(state => state.authReducer)
+  const [registration, { isLoading, error }] = useRegistrationMutation()
 
   const formRef = useRef<HTMLFormElement>(null)
   const passwordRef = useRef<HTMLInputElement>(null)
@@ -69,7 +66,7 @@ const RegistrationForm = () => {
         .validate(formValues, { abortEarly: false })
         .then(() => setFormErrorsValidation({}))
         .then(() => delete formValues.confirmPassword)
-        .then(() => dispatch(registrationPost(formValues)))
+        .then(() => registration(formValues))
         .then(() => {
           if (formRef.current !== null) {
             formRef.current.reset()
@@ -89,7 +86,11 @@ const RegistrationForm = () => {
 
   return (
     <form ref={formRef} className='form' onSubmit={handleSubmit}>
-      {!error ? <h1 className='form__title'>Registration</h1> : <span className='form__error-server'>{error}</span>}
+      {error ? (
+        <span className='form__error-server'>{(error as any).data.message || 'An error occurred'}</span>
+      ) : (
+        <h1 className='form__title'>Registration</h1>
+      )}
       <div className='form__field'>
         <input type='text' name='username' id='username' placeholder='Name' />
       </div>
