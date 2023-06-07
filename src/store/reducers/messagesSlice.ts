@@ -1,11 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { toIndexDB } from 'helpers/toIndexDB'
 import { IMessageState } from 'types/types'
 
 const initialState: IMessageState = {
-  text: '',
+  text: null,
   user: null,
-  date: ''
+  date: null
 }
 
 export const messageSlice = createSlice({
@@ -14,8 +13,6 @@ export const messageSlice = createSlice({
   reducers: {
     setMessage: (state, action) => {
       state = action.payload
-      toIndexDB(state)
-      console.log(state)
     }
   }
 })

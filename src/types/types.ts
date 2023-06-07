@@ -19,7 +19,7 @@ export interface IAuthState {
 }
 
 export interface IMessageState {
-  text?: string
+  text: string | null
   user: IUser | null
-  date: string
+  date: string | null
 }

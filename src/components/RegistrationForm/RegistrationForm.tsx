@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 
 import { IRegistration, IRegistrationError } from 'types/types'
 
@@ -12,7 +12,7 @@ import { formValidation } from './validation'
 
 import './registration-form.css'
 
-const RegistrationForm = () => {
+const RegistrationForm: FC = () => {
   // TODO: replace to update user form
   // const [fileName, setFileName] = useState('Add avatar +')
   // const [miniature, setMiniature] = useState('')
@@ -21,7 +21,6 @@ const RegistrationForm = () => {
 
   const [registration, { isLoading, error }] = useRegistrationMutation()
 
-  const formRef = useRef<HTMLFormElement>(null)
   const passwordRef = useRef<HTMLInputElement>(null)
 
   const navigate = useNavigate()
@@ -68,8 +67,8 @@ const RegistrationForm = () => {
         .then(() => delete formValues.confirmPassword)
         .then(() => registration(formValues))
         .then(() => {
-          if (formRef.current !== null) {
-            formRef.current.reset()
+          if (e.currentTarget !== null) {
+            e.currentTarget.reset()
           }
           setFormDispatched(true)
         })
@@ -85,9 +84,13 @@ const RegistrationForm = () => {
   }
 
   return (
-    <form ref={formRef} className='form' onSubmit={handleSubmit}>
+    <form className='form' onSubmit={handleSubmit}>
       {error ? (
-        <span className='form__error-server'>{(error as any).data.message || 'An error occurred'}</span>
+        (error as any).data ? (
+          <span className='form__error-server'>{(error as any).data.message}</span>
+        ) : (
+          <span className='form__error-server'>{(error as any).status}</span>
+        )
       ) : (
         <h1 className='form__title'>Registration</h1>
       )}

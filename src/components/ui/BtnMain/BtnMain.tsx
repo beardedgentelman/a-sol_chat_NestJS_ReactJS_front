@@ -1,3 +1,4 @@
+import { FC } from 'react'
 import './btn-main.css'
 
 interface BtnMainProps {
@@ -9,7 +10,7 @@ interface BtnMainProps {
   children?: React.ReactNode
 }
 
-const BtnMain = ({ id, onClick, type, className, disabled, children }: BtnMainProps) => {
+const BtnMain: FC<BtnMainProps> = ({ id, onClick, type, className, disabled, children }) => {
   return (
     <button id={id} onClick={onClick} type={type} className={`${className} btn-main`} disabled={disabled}>
       {children}

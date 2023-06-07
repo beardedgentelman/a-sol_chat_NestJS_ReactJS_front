@@ -1,25 +1,13 @@
+import Dexie from 'dexie'
 import { IMessageState } from 'types/types'
 
-export function toIndexDB(state: IMessageState) {
-  const indexDB = window.indexedDB.open('Messages')
+const messagesIndexedDb = new Dexie('Messages')
+messagesIndexedDb.version(1).stores({
+  messages: '++id, text, user, date'
+})
 
-  indexDB.onupgradeneeded = function (e) {
-    const database = (e.target as IDBOpenDBRequest).result as IDBDatabase
+export const messagesTableIndexedDb = messagesIndexedDb.table<IMessageState, number>('messages')
 
-    if (!database.objectStoreNames.contains('message')) {
-      database.createObjectStore('message', { keyPath: 'id', autoIncrement: true })
-    }
-  }
-
-  indexDB.onsuccess = async function (e) {
-    const database = (e.target as IDBOpenDBRequest).result as IDBDatabase
-    const transaction = database.transaction(['message'], 'readwrite')
-    const objectStore = transaction.objectStore('message')
-
-    objectStore.add(state)
-
-    transaction.oncomplete = function () {
-      database.close()
-    }
-  }
+export async function addMessageToIndexDb(messageState: IMessageState) {
+  await messagesTableIndexedDb.add(messageState)
 }
