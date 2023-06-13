@@ -3,16 +3,19 @@ import MessageCard from 'components/ui/MessageCard/MessageCard'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { addMessageToIndexDb, messagesTableIndexedDb } from 'helpers/toIndexDB'
 import { useAppDispatch, useAppSelector } from 'hooks/redux'
-import { FC, useEffect, useRef } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 import { setMessage } from 'store/reducers/messagesSlice'
 import { IMessageState } from 'types/types'
 import './chat-room.css'
 
+import io, { Socket } from 'socket.io-client'
+
 const ChatRoom: FC = () => {
+  const [socket, setSocket] = useState<Socket>()
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   const dispatch = useAppDispatch()
-  const { user } = useAppSelector(state => state.userReducer)
+  const user = useAppSelector(state => state.userReducer)
 
   const allMessages = useLiveQuery(() => messagesTableIndexedDb.toArray(), [])
 
@@ -35,6 +38,15 @@ const ChatRoom: FC = () => {
       textarea.style.height = `${textarea.scrollHeight}px`
     }
   }
+
+  const send = (value: IMessageState) => {
+    socket?.emit('message', value)
+  }
+
+  useEffect(() => {
+    const newSocket = io('http://localhost:8081')
+    setSocket(newSocket)
+  }, [setSocket])
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()

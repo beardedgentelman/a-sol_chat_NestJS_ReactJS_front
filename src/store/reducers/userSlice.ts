@@ -1,11 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { IUser } from 'types/types'
 
-const initialState = {
-  user: {
-    username: '',
-    email: '',
-    userAvatar: undefined
-  }
+const initialState: IUser = {
+  username: '',
+  email: '',
+  userAvatar: undefined
 }
 
 export const userSlice = createSlice({
@@ -13,7 +12,7 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action) => {
-      state.user = action.payload
+      state = action.payload
     }
   }
 })
