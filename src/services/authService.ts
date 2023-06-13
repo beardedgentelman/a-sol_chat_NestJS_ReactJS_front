@@ -20,6 +20,8 @@ export const authAPI = createApi({
           const { data } = await queryFulfilled
           const token = data.token
           const user = data.user
+          console.log(user)
+
           localStorage.setItem('token', token)
           dispatch(setUser(user))
         } catch (error: any) {
