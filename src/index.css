@@ -2,6 +2,8 @@
 
 :root {
   --primary-color: #dbdb2c;
+  --secondary-color: #184f9c;
+  --interlocutor-color: #4e4e4e;
   --error-color: #dc4545;
   --text-color: #04031f;
   --text-color-light: #edeaea;

@@ -27,5 +27,5 @@
       "/@utils": ["/utils"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "./declaration.d.ts"]
 }

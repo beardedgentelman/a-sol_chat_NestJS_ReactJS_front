@@ -1,30 +1,26 @@
-import { useEffect, useRef, useState } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 
 import { IRegistration, IRegistrationError } from 'types/types'
 
-import { useAppDispatch, useAppSelector } from 'hooks/redux'
-
-import { registrationPost } from 'store/reducers/ActionCreators'
-
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import BtnMain from 'components/ui/BtnMain/BtnMain'
 
-import { formValidation } from './validation'
+import { useRegistrationMutation } from 'services/authService'
 
-import './registration-form.css'
+import { formRegistrationValidation } from './validation'
 
-const RegistrationForm = () => {
+import './forms.css'
+
+const RegistrationForm: FC = () => {
   // TODO: replace to update user form
   // const [fileName, setFileName] = useState('Add avatar +')
   // const [miniature, setMiniature] = useState('')
   const [formDispatched, setFormDispatched] = useState(false)
   const [formErrorsValidation, setFormErrorsValidation] = useState<IRegistrationError>({})
 
-  const dispatch = useAppDispatch()
-  const { isLoading, error } = useAppSelector(state => state.authReducer)
+  const [registration, { isLoading, error }] = useRegistrationMutation()
 
-  const formRef = useRef<HTMLFormElement>(null)
   const passwordRef = useRef<HTMLInputElement>(null)
 
   const navigate = useNavigate()
@@ -65,14 +61,14 @@ const RegistrationForm = () => {
     })
 
     try {
-      await formValidation
+      await formRegistrationValidation
         .validate(formValues, { abortEarly: false })
         .then(() => setFormErrorsValidation({}))
         .then(() => delete formValues.confirmPassword)
-        .then(() => dispatch(registrationPost(formValues)))
+        .then(() => registration(formValues))
         .then(() => {
-          if (formRef.current !== null) {
-            formRef.current.reset()
+          if (e.currentTarget !== null) {
+            e.currentTarget.reset()
           }
           setFormDispatched(true)
         })
@@ -88,8 +84,16 @@ const RegistrationForm = () => {
   }
 
   return (
-    <form ref={formRef} className='form' onSubmit={handleSubmit}>
-      {!error ? <h1 className='form__title'>Registration</h1> : <span className='form__error-server'>{error}</span>}
+    <form className='form' onSubmit={handleSubmit}>
+      {error ? (
+        (error as any).data ? (
+          <span className='form__error-server'>{(error as any).data.message}</span>
+        ) : (
+          <span className='form__error-server'>{(error as any).status}</span>
+        )
+      ) : (
+        <h1 className='form__title'>Registration</h1>
+      )}
       <div className='form__field'>
         <input type='text' name='username' id='username' placeholder='Name' />
       </div>
@@ -142,6 +146,9 @@ const RegistrationForm = () => {
       <BtnMain type='submit' className='form__submit' disabled={isLoading && true}>
         {!isLoading ? <span>Submit</span> : <span className='form__loading'></span>}
       </BtnMain>
+      <span className='form__link'>
+        Already have an account? Just <Link to='/login'>login</Link>!
+      </span>
     </form>
   )
 }

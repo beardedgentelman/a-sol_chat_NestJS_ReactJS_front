@@ -1,0 +1,32 @@
+.message-card {
+  max-width: 20rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+
+  color: var(--text-color-light);
+  border-radius: 8px;
+}
+.message-card.me {
+  background-color: var(--secondary-color);
+  align-self: flex-end;
+}
+.message-card.interlocutor {
+  background-color: var(--interlocutor-color);
+  align-self: flex-start;
+}
+.message-card__img-wrapper {
+  max-width: 3rem;
+  border-radius: 100%;
+  overflow: hidden;
+}
+.message-card__img-wrapper img {
+  width: 100%;
+}
+
+.message-card__date {
+  font-size: 10px;
+  align-self: flex-end;
+}
