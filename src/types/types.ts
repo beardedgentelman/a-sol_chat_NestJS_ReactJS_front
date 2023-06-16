@@ -4,8 +4,13 @@ export interface IRegistration {
   password: string
   confirmPassword?: string
 }
+export interface ILogin {
+  email: string
+  password: string
+}
 
 export type IRegistrationError = Partial<Required<IRegistration>>
+export type ILoginError = Partial<Required<ILogin>>
 
 export interface IUser {
   username: string
@@ -20,6 +25,5 @@ export interface IAuthState {
 
 export interface IMessageState {
   text: string | null
-  user: IUser | null
   date: string | null
 }

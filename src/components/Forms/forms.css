@@ -100,6 +100,14 @@
   border-color: var(--text-color) transparent var(--text-color) transparent;
   animation: loading 1.2s linear infinite;
 }
+.form__link {
+  color: var(--text-color-light);
+  font-size: 14px;
+}
+.form__link a {
+  color: #e07fef;
+  text-decoration: underline;
+}
 
 @keyframes error {
   0% {

@@ -1,52 +1,53 @@
 import BtnMain from 'components/ui/BtnMain/BtnMain'
 import MessageCard from 'components/ui/MessageCard/MessageCard'
+import { WebsocketContext } from 'contexts/WebsocketContext'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { addMessageToIndexDb, messagesTableIndexedDb } from 'helpers/toIndexDB'
 import { useAppDispatch, useAppSelector } from 'hooks/redux'
-import { FC, useEffect, useRef, useState } from 'react'
+import { FC, useContext, useEffect, useRef } from 'react'
 import { setMessage } from 'store/reducers/messagesSlice'
 import { IMessageState } from 'types/types'
+import { autoResizeTextarea } from 'utils/autoResizeTextarea'
 import './chat-room.css'
 
-import io, { Socket } from 'socket.io-client'
-
 const ChatRoom: FC = () => {
-  const [socket, setSocket] = useState<Socket>()
+  const socket = useContext(WebsocketContext)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   const dispatch = useAppDispatch()
   const user = useAppSelector(state => state.userReducer)
+  const stateMessages = useAppSelector(state => state.messageReducer)
 
   const allMessages = useLiveQuery(() => messagesTableIndexedDb.toArray(), [])
 
   useEffect(() => {
-    const textarea = textareaRef.current
-    if (textarea) {
-      textarea.addEventListener('input', autoResizeTextarea)
-    }
+    socket.on('connect', () => {
+      console.log('Connected!')
+    })
+    socket.on('onMessage', newMessage => {
+      console.log('onMessage received!')
+      console.log(newMessage)
+    })
+
     return () => {
-      if (textarea) {
-        textarea.removeEventListener('input', autoResizeTextarea)
-      }
+      console.log('Unregistered')
+
+      socket.off('connect')
+      socket.off('onMessage')
     }
   }, [])
 
-  function autoResizeTextarea() {
+  useEffect(() => {
     const textarea = textareaRef.current
     if (textarea) {
-      textarea.style.height = 'auto'
-      textarea.style.height = `${textarea.scrollHeight}px`
+      textarea.addEventListener('input', () => autoResizeTextarea(textarea))
     }
-  }
-
-  const send = (value: IMessageState) => {
-    socket?.emit('message', value)
-  }
-
-  useEffect(() => {
-    const newSocket = io('http://localhost:8081')
-    setSocket(newSocket)
-  }, [setSocket])
+    return () => {
+      if (textarea) {
+        textarea.removeEventListener('input', () => autoResizeTextarea(textarea))
+      }
+    }
+  }, [])
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -55,10 +56,10 @@ const ChatRoom: FC = () => {
 
     const message: IMessageState = {
       text: messageText,
-      user: user,
       date: new Date().toUTCString()
     }
 
+    socket.emit('newMessage', message)
     addMessageToIndexDb(message)
     dispatch(setMessage(message))
     e.currentTarget.reset()
@@ -67,7 +68,7 @@ const ChatRoom: FC = () => {
   return (
     <>
       <div className='chat-room__messages'>
-        {allMessages?.map(({ text, user, date }, id) => (
+        {allMessages?.map(({ text, date }, id) => (
           <MessageCard text={text} user={user} date={date} key={id} />
         ))}
       </div>

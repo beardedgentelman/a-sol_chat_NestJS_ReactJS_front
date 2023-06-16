@@ -2,15 +2,15 @@ import { FC, useEffect, useRef, useState } from 'react'
 
 import { IRegistration, IRegistrationError } from 'types/types'
 
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import BtnMain from 'components/ui/BtnMain/BtnMain'
 
 import { useRegistrationMutation } from 'services/authService'
 
-import { formValidation } from './validation'
+import { formRegistrationValidation } from './validation'
 
-import './registration-form.css'
+import './forms.css'
 
 const RegistrationForm: FC = () => {
   // TODO: replace to update user form
@@ -61,7 +61,7 @@ const RegistrationForm: FC = () => {
     })
 
     try {
-      await formValidation
+      await formRegistrationValidation
         .validate(formValues, { abortEarly: false })
         .then(() => setFormErrorsValidation({}))
         .then(() => delete formValues.confirmPassword)
@@ -146,6 +146,9 @@ const RegistrationForm: FC = () => {
       <BtnMain type='submit' className='form__submit' disabled={isLoading && true}>
         {!isLoading ? <span>Submit</span> : <span className='form__loading'></span>}
       </BtnMain>
+      <span className='form__link'>
+        Already have an account? Just <Link to='/login'>login</Link>!
+      </span>
     </form>
   )
 }
