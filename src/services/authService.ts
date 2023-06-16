@@ -2,11 +2,11 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 import { setUser } from 'store/reducers/userSlice'
 
-import { IAuthState, IRegistration } from 'types/types'
+import { IAuthState, ILogin, IRegistration } from 'types/types'
 
 export const authAPI = createApi({
   reducerPath: 'authAPI',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8080' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8088' }),
   endpoints: builder => ({
     registration: builder.mutation<IAuthState, IRegistration>({
       query: body => ({
@@ -20,8 +20,25 @@ export const authAPI = createApi({
           const { data } = await queryFulfilled
           const token = data.token
           const user = data.user
-          console.log(user)
-
+          localStorage.setItem('token', token)
+          dispatch(setUser(user))
+        } catch (error: any) {
+          localStorage.clear()
+        }
+      }
+    }),
+    login: builder.mutation<IAuthState, ILogin>({
+      query: body => ({
+        url: '/auth/login',
+        method: 'POST',
+        body: body
+      }),
+      transformResponse: (response: IAuthState) => response,
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled
+          const token = data.token
+          const user = data.user
           localStorage.setItem('token', token)
           dispatch(setUser(user))
         } catch (error: any) {
@@ -32,4 +49,4 @@ export const authAPI = createApi({
   })
 })
 
-export const { useRegistrationMutation } = authAPI
+export const { useRegistrationMutation, useLoginMutation } = authAPI

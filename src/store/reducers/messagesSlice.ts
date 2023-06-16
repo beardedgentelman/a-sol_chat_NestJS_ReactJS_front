@@ -3,7 +3,6 @@ import { IMessageState } from 'types/types'
 
 const initialState: IMessageState = {
   text: null,
-  user: null,
   date: null
 }
 

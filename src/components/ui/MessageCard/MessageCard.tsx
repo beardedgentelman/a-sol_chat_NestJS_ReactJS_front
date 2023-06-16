@@ -1,9 +1,10 @@
 import emptyUserAvatar from 'assets/blankProfilePicture.webp'
 import { FC } from 'react'
-import { IMessageState } from 'types/types'
+import { IMessageState, IUser } from 'types/types'
 import './message-card.css'
 
 interface MessageCardProps extends IMessageState {
+  user: IUser
   key: number
 }
 
@@ -22,6 +23,8 @@ const MessageCard: FC<MessageCardProps> = ({ user, text, date }, key) => {
   }
 
   const formattedTime = extractTime(date || '')
+
+  console.log(user)
 
   return (
     <div key={key} className={`message-card ${'me'}`}>
