@@ -46,7 +46,7 @@ const RegistrationForm: FC = () => {
 
     const formData = new FormData(e.currentTarget)
     const formValues: IRegistration = {
-      username: '',
+      name: '',
       email: '',
       password: '',
       confirmPassword: ''
@@ -97,7 +97,7 @@ const RegistrationForm: FC = () => {
       <div className='form__field'>
         <input type='text' name='username' id='username' placeholder='Name' />
       </div>
-      {formErrorsValidation.username && <span className='form__error'>{formErrorsValidation.username}</span>}
+      {formErrorsValidation.name && <span className='form__error'>{formErrorsValidation.name}</span>}
 
       <div className='form__field'>
         <input type='email' name='email' id='email' placeholder='Email' />

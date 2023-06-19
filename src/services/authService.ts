@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import userEvent from '@testing-library/user-event'
 
 import { setUser } from 'store/reducers/userSlice'
 
@@ -18,8 +19,7 @@ export const authAPI = createApi({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
-          const token = data.token
-          const user = data.user
+          const { token, user } = data
           localStorage.setItem('token', token)
           dispatch(setUser(user))
         } catch (error: any) {
@@ -37,9 +37,10 @@ export const authAPI = createApi({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
-          const token = data.token
-          const user = data.user
+          const { token, user } = data
           localStorage.setItem('token', token)
+          console.log(user)
+
           dispatch(setUser(user))
         } catch (error: any) {
           localStorage.clear()

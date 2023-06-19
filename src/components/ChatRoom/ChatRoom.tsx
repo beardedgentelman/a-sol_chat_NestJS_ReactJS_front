@@ -16,22 +16,16 @@ const ChatRoom: FC = () => {
 
   const dispatch = useAppDispatch()
   const user = useAppSelector(state => state.userReducer)
-  const stateMessages = useAppSelector(state => state.messageReducer)
 
   const allMessages = useLiveQuery(() => messagesTableIndexedDb.toArray(), [])
 
   useEffect(() => {
-    socket.on('connect', () => {
-      console.log('Connected!')
-    })
     socket.on('onMessage', newMessage => {
-      console.log('onMessage received!')
-      console.log(newMessage)
+      addMessageToIndexDb(newMessage)
+      dispatch(setMessage(newMessage))
     })
 
     return () => {
-      console.log('Unregistered')
-
       socket.off('connect')
       socket.off('onMessage')
     }
@@ -55,21 +49,21 @@ const ChatRoom: FC = () => {
     const messageText: string | null = textareaRef.current?.value ?? null
 
     const message: IMessageState = {
+      messSocket: socket.id,
       text: messageText,
       date: new Date().toUTCString()
     }
 
     socket.emit('newMessage', message)
-    addMessageToIndexDb(message)
-    dispatch(setMessage(message))
+
     e.currentTarget.reset()
   }
 
   return (
     <>
       <div className='chat-room__messages'>
-        {allMessages?.map(({ text, date }, id) => (
-          <MessageCard text={text} user={user} date={date} key={id} />
+        {allMessages?.map(({ text, date, messSocket }, id) => (
+          <MessageCard text={text} user={user} date={date} messSocket={messSocket} key={id} />
         ))}
       </div>
       <form
