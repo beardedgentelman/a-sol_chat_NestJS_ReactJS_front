@@ -1,5 +1,5 @@
 export interface IRegistration {
-  username: string
+  name: string
   email: string
   password: string
   confirmPassword?: string
@@ -13,9 +13,9 @@ export type IRegistrationError = Partial<Required<IRegistration>>
 export type ILoginError = Partial<Required<ILogin>>
 
 export interface IUser {
-  username: string
+  name: string
   email: string
-  userAvatar?: string
+  avatar?: string | null
 }
 
 export interface IAuthState {
@@ -24,6 +24,7 @@ export interface IAuthState {
 }
 
 export interface IMessageState {
+  messSocket: string | null
   text: string | null
   date: string | null
 }

@@ -1,6 +1,6 @@
 import ChatsAside from 'components/ChatAside/ChatAside'
-import './chats-page.css'
 import ChatRoom from 'components/ChatRoom/ChatRoom'
+import './chats-page.css'
 
 const ChatsPage = () => {
   return (
