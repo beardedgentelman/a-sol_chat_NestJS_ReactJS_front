@@ -17,8 +17,8 @@
   background-color: #252525;
 }
 .form__textarea-container {
-  min-width: 5rem;
-  max-width: 20rem;
+  min-width: 10rem;
+  max-width: 30rem;
   width: 100%;
   display: flex;
   padding: 1rem;
@@ -26,12 +26,10 @@
   background-color: #3e3e3e;
 }
 .form__textarea {
-  flex: 1 1 auto;
   width: 100%;
   box-sizing: border-box;
   min-height: 1rem;
   height: auto;
-  flex: 1 1 auto;
   resize: none;
   text-orientation: mixed;
   outline: none;
