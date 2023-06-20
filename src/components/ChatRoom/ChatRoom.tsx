@@ -1,52 +1,51 @@
 import BtnMain from 'components/ui/BtnMain/BtnMain'
 import MessageCard from 'components/ui/MessageCard/MessageCard'
+import Preloader from 'components/ui/Preloader/Preloader'
 import { WebsocketContext } from 'contexts/WebsocketContext'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { addMessageToIndexDb, messagesTableIndexedDb } from 'helpers/toIndexDB'
 import { useAppDispatch, useAppSelector } from 'hooks/redux'
-import { FC, useContext, useEffect, useRef } from 'react'
+import { FC, useContext, useEffect, useRef, useState } from 'react'
+import { useGetMeMutation } from 'services/userService'
 import { setMessage } from 'store/reducers/messagesSlice'
-import { IMessageState } from 'types/types'
-import { autoResizeTextarea } from 'utils/autoResizeTextarea'
+import { IMessage } from 'types/types'
 import './chat-room.css'
 
 const ChatRoom: FC = () => {
+  const [val, setVal] = useState<string>('')
   const socket = useContext(WebsocketContext)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
+  const [getMe, { isLoading }] = useGetMeMutation()
   const dispatch = useAppDispatch()
   const user = useAppSelector(state => state.userReducer)
-  const stateMessages = useAppSelector(state => state.messageReducer)
 
   const allMessages = useLiveQuery(() => messagesTableIndexedDb.toArray(), [])
 
+  const resizeTextArea = () => {
+    const textarea = textareaRef.current
+    if (textarea) {
+      textarea.style.height = 'auto'
+      textarea.style.height = textarea.scrollHeight + 'px'
+    }
+  }
+
   useEffect(() => {
-    socket.on('connect', () => {
-      console.log('Connected!')
-    })
     socket.on('onMessage', newMessage => {
-      console.log('onMessage received!')
-      console.log(newMessage)
+      addMessageToIndexDb(newMessage)
+      dispatch(setMessage(newMessage))
     })
 
     return () => {
-      console.log('Unregistered')
-
       socket.off('connect')
       socket.off('onMessage')
     }
   }, [])
 
+  useEffect(resizeTextArea, [val])
+
   useEffect(() => {
-    const textarea = textareaRef.current
-    if (textarea) {
-      textarea.addEventListener('input', () => autoResizeTextarea(textarea))
-    }
-    return () => {
-      if (textarea) {
-        textarea.removeEventListener('input', () => autoResizeTextarea(textarea))
-      }
-    }
+    getMe()
   }, [])
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -54,22 +53,24 @@ const ChatRoom: FC = () => {
 
     const messageText: string | null = textareaRef.current?.value ?? null
 
-    const message: IMessageState = {
+    const message: IMessage = {
+      userId: user.id,
       text: messageText,
       date: new Date().toUTCString()
     }
 
     socket.emit('newMessage', message)
-    addMessageToIndexDb(message)
-    dispatch(setMessage(message))
+
     e.currentTarget.reset()
   }
 
-  return (
+  return isLoading ? (
+    <Preloader />
+  ) : (
     <>
       <div className='chat-room__messages'>
-        {allMessages?.map(({ text, date }, id) => (
-          <MessageCard text={text} user={user} date={date} key={id} />
+        {allMessages?.map(({ text, date, userId }, id) => (
+          <MessageCard text={text} user={user} date={date} userId={userId} key={id} />
         ))}
       </div>
       <form
@@ -88,6 +89,7 @@ const ChatRoom: FC = () => {
             id='message__textarea'
             className='form__textarea'
             placeholder='Message...'
+            onChange={() => setVal(textareaRef.current?.value || '')}
           ></textarea>
         </div>
         <BtnMain id='send__btn' type='submit' className='form__btn'>

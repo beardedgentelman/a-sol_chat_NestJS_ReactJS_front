@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { IMessageState } from 'types/types'
+import { IMessage } from 'types/types'
 
-const initialState: IMessageState = {
+const initialState: IMessage = {
+  userId: null,
   text: null,
   date: null
 }
@@ -11,7 +12,7 @@ export const messageSlice = createSlice({
   initialState,
   reducers: {
     setMessage: (state, action) => {
-      state = action.payload
+      return action.payload
     }
   }
 })

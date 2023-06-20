@@ -18,8 +18,7 @@ export const authAPI = createApi({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
-          const token = data.token
-          const user = data.user
+          const { token, user } = data
           localStorage.setItem('token', token)
           dispatch(setUser(user))
         } catch (error: any) {
@@ -37,8 +36,7 @@ export const authAPI = createApi({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
-          const token = data.token
-          const user = data.user
+          const { token, user } = data
           localStorage.setItem('token', token)
           dispatch(setUser(user))
         } catch (error: any) {
