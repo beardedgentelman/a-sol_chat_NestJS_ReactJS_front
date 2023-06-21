@@ -1,0 +1,23 @@
+.chat-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  color: var(--text-color-light);
+  padding: 0.5rem;
+  cursor: pointer;
+}
+.chat-card:hover {
+  background-color: #3c341f7b;
+}
+.chat-card__img-wrapper {
+  width: 4rem;
+  height: 4rem;
+}
+.chat-card__img-wrapper img {
+  width: 100%;
+}
+.chat-card__title {
+  flex: 1 1 auto;
+  text-align: center;
+}

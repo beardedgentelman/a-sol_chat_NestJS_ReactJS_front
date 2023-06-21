@@ -1,4 +1,3 @@
-import emptyUserAvatar from 'assets/blankProfilePicture.webp'
 import { useAppSelector } from 'hooks/redux'
 import { FC } from 'react'
 import { IMessage, IUser } from 'types/types'
@@ -29,9 +28,6 @@ const MessageCard: FC<MessageCardProps> = ({ user, text, date, userId }, key) =>
 
   return (
     <div key={key} className={`message-card ${userId === userState.id ? 'me' : 'interlocutor'}`}>
-      <div className='message-card__img-wrapper'>
-        <img src={!user?.avatar ? emptyUserAvatar : user.avatar} alt='User icon' />
-      </div>
       <p className='message-card__text'>{text}</p>
       <p className='message-card__date'>{formattedTime}</p>
     </div>
