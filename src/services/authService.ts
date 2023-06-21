@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import userEvent from '@testing-library/user-event'
 
 import { setUser } from 'store/reducers/userSlice'
 
@@ -39,8 +38,6 @@ export const authAPI = createApi({
           const { data } = await queryFulfilled
           const { token, user } = data
           localStorage.setItem('token', token)
-          console.log(user)
-
           dispatch(setUser(user))
         } catch (error: any) {
           localStorage.clear()

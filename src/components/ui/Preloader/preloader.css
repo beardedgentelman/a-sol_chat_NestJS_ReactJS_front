@@ -1,0 +1,32 @@
+.preloader {
+  content: '';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #252525;
+}
+.preloader::after {
+  content: '';
+  display: block;
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  border-top: 2px solid var(--text-color-light);
+  border-right: 2px solid var(--text-color-light);
+  animation: loading 1.2s linear infinite;
+}
+@keyframes loading {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

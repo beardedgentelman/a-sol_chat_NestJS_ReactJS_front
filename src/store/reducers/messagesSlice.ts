@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { IMessageState } from 'types/types'
+import { IMessage } from 'types/types'
 
-const initialState: IMessageState = {
-  messSocket: null,
+const initialState: IMessage = {
+  userId: null,
   text: null,
   date: null
 }
