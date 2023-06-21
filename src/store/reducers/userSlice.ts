@@ -5,6 +5,7 @@ const initialState: IUser = {
   id: null,
   name: '',
   email: '',
+  chats: null,
   avatar: null
 }
 

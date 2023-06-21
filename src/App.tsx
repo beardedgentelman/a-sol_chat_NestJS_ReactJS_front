@@ -6,6 +6,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import AuthRoute from 'routes/AuthRoute'
 
 function App() {
+  const token = localStorage.getItem('token')
   return (
     <div className='App'>
       <WebsocketProvider value={socket}>
@@ -13,7 +14,7 @@ function App() {
           <Route element={<AuthRoute />}>
             <Route path='/chats' element={<ChatsPage />} />
           </Route>
-          <Route path='/' element={<Navigate to='/login' replace />} />
+          <Route path='/' element={<Navigate to={token ? '/login' : '/chats'} replace />} />
           <Route path='/registration' element={<RegistrationPage />} />
           <Route path='/login' element={<LoginPage />} />
         </Routes>
