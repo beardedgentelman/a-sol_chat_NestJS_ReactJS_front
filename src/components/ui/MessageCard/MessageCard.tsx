@@ -1,4 +1,3 @@
-import { useAppSelector } from 'hooks/redux'
 import { FC } from 'react'
 import { IMessage, IUser } from 'types/types'
 import './message-card.css'
@@ -8,9 +7,7 @@ interface MessageCardProps extends IMessage {
   key: number
 }
 
-const MessageCard: FC<MessageCardProps> = ({ user, text, date, userId }, key) => {
-  const userState = useAppSelector(state => state.userReducer)
-
+const MessageCard: FC<MessageCardProps> = ({ user, text, date, userId, chatId }, key) => {
   const extractTime = (dateString: string | null): string => {
     if (dateString) {
       const regex = /(\d{2}):(\d{2})/
@@ -27,7 +24,7 @@ const MessageCard: FC<MessageCardProps> = ({ user, text, date, userId }, key) =>
   const formattedTime = extractTime(date || '')
 
   return (
-    <div key={key} className={`message-card ${userId === userState.id ? 'me' : 'interlocutor'}`}>
+    <div key={key} className={`message-card ${userId === user.id ? 'me' : 'interlocutor'}`}>
       <p className='message-card__text'>{text}</p>
       <p className='message-card__date'>{formattedTime}</p>
     </div>

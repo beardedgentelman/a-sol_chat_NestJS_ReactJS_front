@@ -17,6 +17,8 @@
 }
 .chats-aside__chats-list {
   flex: 1 1 auto;
+  max-height: calc(100vh - 63px);
+  overflow-y: auto;
 }
 .chat-aside__modal-wrapper {
   position: absolute;

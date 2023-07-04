@@ -32,11 +32,17 @@ export const chatAPI = createApi({
           const { data } = await queryFulfilled
           const chat = data as IChat
         } catch (error: any) {
-          console.log(error)
+          return error
         }
       }
+    }),
+    getChat: builder.query<IChat, number>({
+      query: chatId => ({
+        url: `/chats/${chatId}`,
+        method: 'GET'
+      })
     })
   })
 })
 
-export const { useCreateChatMutation } = chatAPI
+export const { useCreateChatMutation, useGetChatQuery } = chatAPI

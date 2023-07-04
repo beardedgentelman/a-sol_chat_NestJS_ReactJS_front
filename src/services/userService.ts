@@ -24,7 +24,10 @@ export const userAPI = createApi({
           const { data } = await queryFulfilled
           const user = data as IUser
           dispatch(setUser(user))
-        } catch (error: any) {}
+        } catch (error: any) {
+          localStorage.clear()
+          return error
+        }
       }
     })
   })

@@ -34,6 +34,7 @@ export interface IChat {
 
 export interface IMessage {
   userId: number | null
+  chatId: number | null
   text: string | null
   date: string | null
 }

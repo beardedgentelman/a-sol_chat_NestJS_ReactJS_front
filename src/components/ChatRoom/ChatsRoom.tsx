@@ -1,11 +1,13 @@
 import BtnMain from 'components/ui/BtnMain/BtnMain'
 import MessageCard from 'components/ui/MessageCard/MessageCard'
 import Preloader from 'components/ui/Preloader/Preloader'
+import Textarea from 'components/ui/Textarea/Textarea'
 import { WebsocketContext } from 'contexts/WebsocketContext'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { addMessageToIndexDb, messagesTableIndexedDb } from 'helpers/toIndexDB'
 import { useAppDispatch, useAppSelector } from 'hooks/redux'
 import { FC, useContext, useEffect, useRef, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { useGetMeMutation } from 'services/userService'
 import { setMessage } from 'store/reducers/messagesSlice'
 import { IMessage } from 'types/types'
@@ -19,6 +21,8 @@ const ChatRoom: FC = () => {
   const [getMe, { isLoading }] = useGetMeMutation()
   const dispatch = useAppDispatch()
   const user = useAppSelector(state => state.userReducer)
+  const room = useParams<{ id: string }>().id
+  const chatId = room ? room.substring(room.indexOf('_') + 1) : ''
 
   const allMessages = useLiveQuery(() => messagesTableIndexedDb.toArray(), [])
 
@@ -31,6 +35,8 @@ const ChatRoom: FC = () => {
   }
 
   useEffect(() => {
+    socket.emit('joinRoom', room)
+
     socket.on('onMessage', newMessage => {
       addMessageToIndexDb(newMessage)
       dispatch(setMessage(newMessage))
@@ -40,37 +46,43 @@ const ChatRoom: FC = () => {
       socket.off('connect')
       socket.off('onMessage')
     }
-  }, [])
+  }, [room])
 
   useEffect(resizeTextArea, [val])
 
   useEffect(() => {
-    getMe()
+    if (user.id === null) {
+      getMe()
+    }
   }, [])
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     const messageText: string | null = textareaRef.current?.value ?? null
+    console.log(room)
 
     const message: IMessage = {
       userId: user.id,
+      chatId: +chatId,
       text: messageText,
       date: new Date().toUTCString()
     }
 
-    socket.emit('newMessage', message)
+    socket.emit('newMessage', { room, message })
 
     e.currentTarget.reset()
   }
+
+  const filteredMessages = allMessages?.filter(message => message.chatId === +chatId)
 
   return isLoading ? (
     <Preloader />
   ) : (
     <>
       <div className='chat-room__messages'>
-        {allMessages?.map(({ text, date, userId }, id) => (
-          <MessageCard text={text} user={user} date={date} userId={userId} key={id} />
+        {filteredMessages?.map(({ text, date, userId }, id) => (
+          <MessageCard text={text} user={user} date={date} chatId={+chatId} userId={userId} key={id} />
         ))}
       </div>
       <form
@@ -84,13 +96,13 @@ const ChatRoom: FC = () => {
         }}
       >
         <div className='form__textarea-container'>
-          <textarea
-            ref={textareaRef}
+          <Textarea
+            forwardedRef={textareaRef}
             id='message__textarea'
             className='form__textarea'
             placeholder='Message...'
             onChange={() => setVal(textareaRef.current?.value || '')}
-          ></textarea>
+          ></Textarea>
         </div>
         <BtnMain id='send__btn' type='submit' className='form__btn'>
           Send

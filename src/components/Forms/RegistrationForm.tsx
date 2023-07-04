@@ -95,7 +95,7 @@ const RegistrationForm: FC = () => {
         <h1 className='form__title'>Registration</h1>
       )}
       <div className='form__field'>
-        <input type='text' name='username' id='username' placeholder='Name' />
+        <input type='text' name='name' id='name' placeholder='Name' />
       </div>
       {formErrorsValidation.name && <span className='form__error'>{formErrorsValidation.name}</span>}
 
