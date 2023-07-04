@@ -3,6 +3,7 @@ import { IMessage } from 'types/types'
 
 const initialState: IMessage = {
   userId: null,
+  chatId: null,
   text: null,
   date: null
 }
