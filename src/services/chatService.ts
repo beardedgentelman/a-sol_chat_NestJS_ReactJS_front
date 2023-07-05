@@ -4,6 +4,10 @@ import { IChat } from 'types/types'
 interface IChatName {
   name: string
 }
+interface IJoinChat {
+  userId: number
+  chatId: number
+}
 
 export const chatAPI = createApi({
   reducerPath: 'chatAPI',
@@ -41,8 +45,17 @@ export const chatAPI = createApi({
         url: `/chats/${chatId}`,
         method: 'GET'
       })
+    }),
+    joinChat: builder.mutation<IChat, IJoinChat>({
+      query: body => {
+        return {
+          url: `/chats/${body.chatId}`,
+          method: 'POST',
+          body: { userId: body.userId }
+        }
+      }
     })
   })
 })
 
-export const { useCreateChatMutation, useGetChatQuery } = chatAPI
+export const { useCreateChatMutation, useGetChatQuery, useLazyGetChatQuery, useJoinChatMutation } = chatAPI
