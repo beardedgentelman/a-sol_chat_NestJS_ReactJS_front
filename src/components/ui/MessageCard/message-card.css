@@ -9,11 +9,11 @@
   color: var(--text-color-light);
   border-radius: 8px;
 }
-.message-card.me {
+.ScrollbarsCustom-Content .message-card.me {
   background-color: var(--secondary-color);
   align-self: flex-end;
 }
-.message-card.interlocutor {
+.ScrollbarsCustom-Content .message-card.interlocutor {
   background-color: var(--interlocutor-color);
   align-self: flex-start;
 }

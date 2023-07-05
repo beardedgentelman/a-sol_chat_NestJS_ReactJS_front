@@ -51,6 +51,9 @@
   border-radius: 8px;
   color: var(--text-color-light);
 }
+.chat-page__modal {
+  width: 20%;
+}
 .chat-aside__modal-close {
   display: flex;
   justify-content: center;
@@ -81,4 +84,8 @@
   outline: none;
   font-size: 16px;
   text-align: center;
+}
+.chats-aside__btns {
+  display: flex;
+  gap: 0.2rem;
 }

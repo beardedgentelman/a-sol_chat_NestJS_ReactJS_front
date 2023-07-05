@@ -8,6 +8,8 @@ import { addMessageToIndexDb, messagesTableIndexedDb } from 'helpers/toIndexDB'
 import { useAppDispatch, useAppSelector } from 'hooks/redux'
 import { FC, useContext, useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { Scrollbar } from 'react-scrollbars-custom'
+import { useLazyGetChatQuery } from 'services/chatService'
 import { useGetMeMutation } from 'services/userService'
 import { setMessage } from 'store/reducers/messagesSlice'
 import { IMessage } from 'types/types'
@@ -19,6 +21,7 @@ const ChatRoom: FC = () => {
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   const [getMe, { isLoading }] = useGetMeMutation()
+  const [getChat] = useLazyGetChatQuery()
   const dispatch = useAppDispatch()
   const user = useAppSelector(state => state.userReducer)
   const room = useParams<{ id: string }>().id
@@ -36,6 +39,10 @@ const ChatRoom: FC = () => {
 
   useEffect(() => {
     socket.emit('joinRoom', room)
+
+    socket.on('reloadPage', () => {
+      getChat(+chatId)
+    })
 
     socket.on('onMessage', newMessage => {
       addMessageToIndexDb(newMessage)
@@ -60,13 +67,12 @@ const ChatRoom: FC = () => {
     e.preventDefault()
 
     const messageText: string | null = textareaRef.current?.value ?? null
-    console.log(room)
 
     const message: IMessage = {
       userId: user.id,
       chatId: +chatId,
       text: messageText,
-      date: new Date().toUTCString()
+      date: new Date().toString()
     }
 
     socket.emit('newMessage', { room, message })
@@ -81,9 +87,11 @@ const ChatRoom: FC = () => {
   ) : (
     <>
       <div className='chat-room__messages'>
-        {filteredMessages?.map(({ text, date, userId }, id) => (
-          <MessageCard text={text} user={user} date={date} chatId={+chatId} userId={userId} key={id} />
-        ))}
+        <Scrollbar style={{ width: '100%', height: '100%' }}>
+          {filteredMessages?.map(({ text, date, userId }, id) => (
+            <MessageCard text={text} user={user} date={date} chatId={+chatId} userId={userId} key={id} />
+          ))}
+        </Scrollbar>
       </div>
       <form
         id='chat__form'
