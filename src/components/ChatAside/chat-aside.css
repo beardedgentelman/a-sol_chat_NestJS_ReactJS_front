@@ -15,6 +15,15 @@
   flex: 1 1 auto;
   overflow: hidden;
 }
+.chat-aside__search {
+  padding: 0.5rem 1rem;
+  background-color: #1d1d1d;
+  outline: none;
+  border-block: 7px solid #252525;
+  color: var(--text-color-light);
+  text-align: center;
+  font-size: 16px;
+}
 .chats-aside__chats-list {
   flex: 1 1 auto;
   max-height: calc(100vh - 63px);

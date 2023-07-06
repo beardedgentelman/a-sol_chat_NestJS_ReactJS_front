@@ -12,7 +12,7 @@ interface IJoinChat {
 export const chatAPI = createApi({
   reducerPath: 'chatAPI',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:8088',
+    baseUrl: 'http://localhost:8088', // create constant variables
     prepareHeaders: headers => {
       const token = localStorage.getItem('token')
       if (token) {

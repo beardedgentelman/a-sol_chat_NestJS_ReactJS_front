@@ -2,17 +2,22 @@ import ChatsAside from 'components/ChatAside/ChatAside'
 import BtnMain from 'components/ui/BtnMain/BtnMain'
 import ChatCard from 'components/ui/ChatCard/ChatCard'
 import Preloader from 'components/ui/Preloader/Preloader'
+import { WebsocketContext } from 'contexts/WebsocketContext'
+import debounce from 'helpers/debounce'
 import { useAppSelector } from 'hooks/redux'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Scrollbar } from 'react-scrollbars-custom'
 import { useCreateChatMutation, useJoinChatMutation } from 'services/chatService'
 import { useGetMeMutation } from 'services/userService'
+import { IChat } from 'types/types'
 import './chats-page.css'
 
 const ChatsPage = () => {
   const [modal, showModal] = useState(false)
   const [joinModal, showJoinModal] = useState(false)
+  const [chatsSearchRes, setChatSearchRes] = useState<IChat[]>([])
+  const socket = useContext(WebsocketContext)
   const [createChat, { isLoading: createChatLoading, error: createChatError }] = useCreateChatMutation()
   const [joinChat, { isLoading: joinChatLoading, error: joinChatError }] = useJoinChatMutation()
   const [getMe, { isLoading: getMeLoading, error: getMeError }] = useGetMeMutation()
@@ -43,6 +48,9 @@ const ChatsPage = () => {
 
     const formData = new FormData(e.currentTarget)
     const chatLink = formData.get('chatLink')?.toString()
+    const chatName = formData.get('chats-list')?.toString()
+    console.log(chatName)
+
     const chatId = chatLink ? chatLink.substring(chatLink.indexOf('_') + 1) : ''
     if (chatLink && chatLink !== '') {
       try {
@@ -72,6 +80,15 @@ const ChatsPage = () => {
       return error.error.message
     }
   }
+
+  const handleSearchChange = debounce(value => {
+    if (value !== '') {
+      socket.emit('chatsSearch', value)
+      socket.on('chatsSearchResult', result => {
+        setChatSearchRes(result)
+      })
+    }
+  }, 300)
 
   useEffect(() => {
     getMe()
@@ -138,6 +155,26 @@ const ChatsPage = () => {
                     </form>
                   )}
                 </div>
+                <input
+                  className='chat-aside__search'
+                  id='chats-list__input'
+                  list='chats-list'
+                  name='chats-list'
+                  onChange={e => handleSearchChange(e.target.value)}
+                  placeholder='Chat search'
+                />
+                {Array.isArray(chatsSearchRes) ? (
+                  <datalist id='chats-list'>
+                    {chatsSearchRes.map(chat => (
+                      <option
+                        className='chats-list__option'
+                        value={chat.name}
+                        key={chat.id}
+                        onClick={() => console.log(chat)}
+                      />
+                    ))}
+                  </datalist>
+                ) : null}
                 <ul className='chats-aside__chats-list'>
                   <Scrollbar style={{ width: '100%', height: '100%' }}>
                     {userChats?.map(chat => (

@@ -1,0 +1,31 @@
+.main-page {
+  background: rgb(170, 7, 173);
+  background: linear-gradient(220deg, rgba(170, 7, 173, 0.9) 0%, rgba(48, 45, 232, 0.9) 100%);
+  padding: 3rem 1rem;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  border: 2px solid #e2e2e2;
+  box-shadow: 2px 3px 6px 2px var(--text-color);
+  border-radius: 8px;
+}
+.main-page__title {
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--text-color-light);
+  text-shadow: 1px 2px 1px #474747;
+}
+.main-page__links {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  font-size: 22px;
+}
+.main-page__link {
+  font-size: 20px;
+}
+.main-page__link a {
+  color: var(--text-color);
+}

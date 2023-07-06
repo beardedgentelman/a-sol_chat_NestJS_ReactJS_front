@@ -10,3 +10,6 @@
   flex-direction: column;
   align-items: center;
 }
+.chats-list__option {
+  cursor: pointer;
+}
