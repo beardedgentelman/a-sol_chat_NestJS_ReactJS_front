@@ -13,3 +13,7 @@
 .chats-list__option {
   cursor: pointer;
 }
+.chat-page__modal {
+  width: 100%;
+  max-width: 50rem;
+}

@@ -1,9 +1,9 @@
 import ChatsAside from 'components/ChatAside/ChatAside'
 import BtnMain from 'components/ui/BtnMain/BtnMain'
 import ChatCard from 'components/ui/ChatCard/ChatCard'
+import ModalForm from 'components/ui/ModalForm/ModalForm'
 import Preloader from 'components/ui/Preloader/Preloader'
 import { WebsocketContext } from 'contexts/WebsocketContext'
-import debounce from 'helpers/debounce'
 import { useAppSelector } from 'hooks/redux'
 import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -81,14 +81,14 @@ const ChatsPage = () => {
     }
   }
 
-  const handleSearchChange = debounce(value => {
+  const handleSearchChange = (value: string) => {
     if (value !== '') {
       socket.emit('chatsSearch', value)
       socket.on('chatsSearchResult', result => {
         setChatSearchRes(result)
       })
     }
-  }, 300)
+  }
 
   useEffect(() => {
     getMe()
@@ -115,44 +115,25 @@ const ChatsPage = () => {
                   onClick={event => {
                     if (event.target === event.currentTarget) {
                       showModal(false)
+                      showJoinModal(false)
                     }
                   }}
                 >
                   {modal && (
-                    <form className='chat-aside__modal-form' onSubmit={createChatHandle}>
-                      <div className='chat-aside__modal-close' onClick={() => showModal(false)}>
-                        &#9587;
-                      </div>
-                      <label htmlFor='modal-form__input' className='modal-form__label'>
-                        <span>Enter chat name</span>
-                        <input
-                          type='text'
-                          id='modal-form__input'
-                          name='chatName'
-                          className='modal-form__input'
-                          required
-                        />
-                      </label>
-                      <BtnMain type='submit'>Create</BtnMain>
-                    </form>
+                    <ModalForm
+                      onSubmit={createChatHandle}
+                      onClose={() => showModal(false)}
+                      modalTitle='Enter chat name'
+                      btnTitle='Create'
+                    />
                   )}
                   {joinModal && (
-                    <form className='chat-aside__modal-form' onSubmit={joinChatHandle}>
-                      <div className='chat-aside__modal-close' onClick={() => showJoinModal(false)}>
-                        &#9587;
-                      </div>
-                      <label htmlFor='modal-form__link-input' className='modal-form__label'>
-                        <span>Paste Chat Link</span>
-                        <input
-                          type='text'
-                          id='modal-form__link-input'
-                          name='chatLink'
-                          className='modal-form__input'
-                          required
-                        />
-                      </label>
-                      <BtnMain type='submit'>Join Chat</BtnMain>
-                    </form>
+                    <ModalForm
+                      onSubmit={joinChatHandle}
+                      onClose={() => showJoinModal(false)}
+                      modalTitle='Paste Chat Link'
+                      btnTitle='Join Chat'
+                    />
                   )}
                 </div>
                 <input
