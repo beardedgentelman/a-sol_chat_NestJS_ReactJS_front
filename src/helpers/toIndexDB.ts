@@ -9,5 +9,7 @@ messagesIndexedDb.version(1).stores({
 export const messagesTableIndexedDb = messagesIndexedDb.table<IMessage, number>('messages')
 
 export async function addMessageToIndexDb(messageState: IMessage) {
+  console.log(messageState)
+
   await messagesTableIndexedDb.add(messageState)
 }

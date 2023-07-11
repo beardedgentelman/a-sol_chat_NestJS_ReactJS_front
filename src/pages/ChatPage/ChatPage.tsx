@@ -15,7 +15,7 @@ const ChatPage = () => {
   const [modal, showModal] = useState(false)
   const [url, setUrl] = useState('')
   const [getChat, { isLoading: getChatLoading }] = useLazyGetChatQuery()
-  const [joinChat, { isLoading: joinChatLoading, error: joinChatError }] = useJoinChatMutation()
+  const [joinChat, { isLoading: joinChatLoading }] = useJoinChatMutation()
   const userState = useAppSelector(state => state.userReducer)
   const room = useParams<{ id: string }>().id
 
@@ -67,7 +67,7 @@ const ChatPage = () => {
         <ChatRoom />
       </section>
       <ChatsAside>
-        {isLoading || getChatLoading ? (
+        {isLoading || getChatLoading || getChatLoading ? (
           <Preloader />
         ) : (
           <ul className='chats-aside__chats-list'>
