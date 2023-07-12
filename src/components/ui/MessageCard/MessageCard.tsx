@@ -25,8 +25,11 @@ const MessageCard: FC<MessageCardProps> = ({ user, text, date, userId, chatId },
 
   return (
     <div key={key} className={`message-card ${userId === user.id ? 'me' : 'interlocutor'}`}>
-      <p className='message-card__text'>{text}</p>
-      <p className='message-card__date'>{formattedTime}</p>
+      <h3 className='message-card__name'>{user.name}</h3>
+      <div className='message-card__text-date'>
+        <p className='message-card__text'>{text}</p>
+        <p className='message-card__date'>{formattedTime}</p>
+      </div>
     </div>
   )
 }

@@ -1,25 +1,27 @@
 import ChatsAside from 'components/ChatAside/ChatAside'
 import ChatRoom from 'components/ChatRoom/ChatsRoom'
 import BtnMain from 'components/ui/BtnMain/BtnMain'
+import ModalForm from 'components/ui/ModalForm/ModalForm'
 import Preloader from 'components/ui/Preloader/Preloader'
 import UserCard from 'components/ui/UserCard/UserCard'
-import { useState } from 'react'
+import { useAppSelector } from 'hooks/redux'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Scrollbar } from 'react-scrollbars-custom'
-import { useGetChatQuery, useLazyGetChatQuery } from 'services/chatService'
+import { useGetChatQuery, useJoinChatMutation, useLazyGetChatQuery } from 'services/chatService'
 import '../ChatsPage/chats-page.css'
 
 const ChatPage = () => {
   const [modal, showModal] = useState(false)
   const [url, setUrl] = useState('')
   const [getChat, { isLoading: getChatLoading }] = useLazyGetChatQuery()
+  const [joinChat, { isLoading: joinChatLoading }] = useJoinChatMutation()
+  const userState = useAppSelector(state => state.userReducer)
   const room = useParams<{ id: string }>().id
 
   const chatId = room ? room.substring(room.indexOf('_') + 1) : ''
 
-  const { data: chat, isLoading, isError } = useGetChatQuery(+chatId)
-
-  console.log(chat)
+  const { data: chat, isLoading } = useGetChatQuery(+chatId)
 
   const generateLink = () => {
     setUrl(`http://localhost:3000/chats/${room}`)
@@ -30,6 +32,16 @@ const ChatPage = () => {
     navigator.clipboard.writeText(url)
     showModal(false)
   }
+
+  useEffect(() => {
+    const isUserInChat = chat?.users.find(user => user.id === userState.id)
+    if (!isUserInChat && chat?.id) {
+      joinChat({
+        userId: userState.id!,
+        chatId: chat.id
+      })
+    }
+  }, [chat, userState.id, joinChat])
 
   return (
     <main className='chats-page'>
@@ -42,34 +54,26 @@ const ChatPage = () => {
             }
           }}
         >
-          <form className='chat-aside__modal-form chat-page__modal' onSubmit={copyTheLink}>
-            <div className='chat-aside__modal-close' onClick={() => showModal(false)}>
-              &#9587;
-            </div>
-            <label htmlFor='modal-form__input' className='modal-form__label'>
-              <span>Enter chat name</span>
-              <input
-                type='text'
-                id='modal-form__input'
-                name='chatName'
-                className='modal-form__input'
-                value={url}
-                readOnly
-              />
-            </label>
-            <BtnMain type='submit'>Copy the link</BtnMain>
-          </form>
+          <ModalForm
+            className='chat-page__modal'
+            onSubmit={copyTheLink}
+            onClose={() => showModal(false)}
+            modalTitle='Link to copy'
+            btnTitle='Copy the link'
+            value={url}
+            readOnly
+          />
         </div>
         <ChatRoom />
       </section>
       <ChatsAside>
-        {isLoading || getChatLoading ? (
+        {isLoading || getChatLoading || getChatLoading ? (
           <Preloader />
         ) : (
           <ul className='chats-aside__chats-list'>
             <Scrollbar style={{ width: '100%', height: '100%' }}>
               {chat?.users.map(user => {
-                return <UserCard cardKey={user.id} img={user.avatar} userName={user.name} />
+                return <UserCard key={user.id} img={user.avatar} userName={user.name} />
               })}
             </Scrollbar>
           </ul>

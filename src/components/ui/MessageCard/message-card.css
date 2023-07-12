@@ -2,8 +2,10 @@
   max-width: 20rem;
   width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
   padding: 1rem;
 
   color: var(--text-color-light);
@@ -17,16 +19,18 @@
   background-color: var(--interlocutor-color);
   align-self: flex-start;
 }
-.message-card__img-wrapper {
-  max-width: 3rem;
-  border-radius: 100%;
-  overflow: hidden;
-}
-.message-card__img-wrapper img {
+.message-card__text-date {
   width: 100%;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
 }
-
+.message-card__name {
+  text-align: center;
+  font-size: 18px;
+  color: var(--primary-color);
+}
 .message-card__date {
-  font-size: 10px;
-  align-self: flex-end;
+  font-size: 8px;
 }
