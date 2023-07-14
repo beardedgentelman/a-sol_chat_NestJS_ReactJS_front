@@ -8,8 +8,8 @@ export const updateUserValidation = Yup.object().shape({
       is: (name: string) => !!name,
       then: () => Yup.string().required('Email is required').email('Invalid email')
     }),
-  file: Yup.mixed()
-    .label('file')
+  avatar: Yup.mixed() // Update 'file' to 'avatar' here
+    .label('avatar')
     .when(['name', 'email'], {
       is: (name: string, email: string) => name && email,
       then: () =>

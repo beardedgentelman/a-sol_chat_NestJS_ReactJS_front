@@ -57,7 +57,9 @@ const UserCabinet: FC<UserCabinetProps> = ({ user }) => {
       if (key === 'avatar') {
         formValues.avatar = value as File
       } else {
-        formValues[key] = value as IUpdate
+        const formValue = value as string
+        // eslint-disable-next-line prettier/prettier
+        (formValues as any)[key] = formValue
       }
     }
 
@@ -70,11 +72,10 @@ const UserCabinet: FC<UserCabinetProps> = ({ user }) => {
           return acc
         }, {})
         setFormErrorsValidation(validationErrors)
+        console.log(formErrorsValidation)
       }
     }
   }
-
-  console.log(formErrorsValidation)
 
   return (
     <BackgroundBox className='user-cabinet__bg-box'>
