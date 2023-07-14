@@ -1,11 +1,16 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "es2015",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "downlevelIteration": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
@@ -17,15 +22,34 @@
     "jsx": "react-jsx",
     "baseUrl": "./src",
     "paths": {
-      "/@*": ["/*"],
-      "/@assets": ["/assets"],
-      "/@components": ["/components"],
-      "/@containers": ["/containers"],
-      "/@pages": ["/pages"],
-      "/@services": ["/services"],
-      "/@store": ["/store"],
-      "/@utils": ["/utils"]
+      "/@*": [
+        "/*"
+      ],
+      "/@assets": [
+        "/assets"
+      ],
+      "/@components": [
+        "/components"
+      ],
+      "/@containers": [
+        "/containers"
+      ],
+      "/@pages": [
+        "/pages"
+      ],
+      "/@services": [
+        "/services"
+      ],
+      "/@store": [
+        "/store"
+      ],
+      "/@utils": [
+        "/utils"
+      ]
     }
   },
-  "include": ["src", "./declaration.d.ts"]
+  "include": [
+    "src",
+    "./declaration.d.ts"
+  ]
 }

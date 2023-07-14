@@ -1,0 +1,123 @@
+.logout__btn {
+  width: 3rem;
+  height: 3rem;
+  padding: 0.5rem;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 100;
+}
+.logout__btn img {
+  width: 100%;
+  transform: rotate(180deg);
+}
+.chats-page {
+  width: 100%;
+  min-height: 100vh;
+  height: 100%;
+  display: flex;
+}
+.chats-page__global {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.chats-list__option {
+  cursor: pointer;
+}
+.chat-page__modal {
+  width: 100%;
+  max-width: 50rem;
+}
+.user-cabinet__bg-box {
+  width: 100% !important;
+}
+.user-cabinet {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+  width: 100%;
+  height: fit-content;
+  max-width: 60rem;
+  max-height: 40rem;
+  padding: 5rem;
+  margin: 5rem auto;
+  border-radius: 8px;
+  color: var(--text-color-light);
+  background-color: var(--gray-color);
+  box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.5);
+}
+.user-cabinet__information {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4rem;
+}
+.user-cabinet__img-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+.user-cabinet__img {
+  width: 10rem;
+  height: 10rem;
+  border-radius: 100%;
+  overflow: hidden;
+}
+.user-cabinet__img img {
+  width: 100%;
+  height: 100%;
+}
+.information__box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  height: 100%;
+  padding: 0.5rem;
+  border-radius: 8px;
+  background-color: var(--black-color);
+}
+.information__label {
+  font-size: 14px;
+}
+.information__username {
+  font-size: 22px;
+  padding: 0.3rem 0;
+}
+.information__input {
+  background-color: var(--black-color);
+  color: var(--text-color-light);
+  font-family: 'Varta', sans-serif;
+  font-size: 22px;
+  padding: 0 1rem 0 0;
+  outline: none;
+}
+.information__input:-webkit-autofill,
+.information__input:-webkit-autofill:hover,
+.information__input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--text-color-light);
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.information__btn-wrapper {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+.information__btn {
+  width: 5rem;
+  margin: 0;
+}
+.user-cabinet__file {
+  display: none;
+}
+.user-cabinet__file-btn {
+  margin-top: 1rem;
+}

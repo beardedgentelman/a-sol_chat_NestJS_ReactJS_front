@@ -1,4 +1,6 @@
 import ChatsAside from 'components/ChatAside/ChatAside'
+import Logout from 'components/Logout/Logout'
+import UserCabinet from 'components/UserCabinet/UserCabinet'
 import BtnMain from 'components/ui/BtnMain/BtnMain'
 import ChatCard from 'components/ui/ChatCard/ChatCard'
 import ModalForm from 'components/ui/ModalForm/ModalForm'
@@ -11,9 +13,9 @@ import { Scrollbar } from 'react-scrollbars-custom'
 import { useCreateChatMutation, useJoinChatMutation } from 'services/chatService'
 import { useGetMeMutation } from 'services/userService'
 import { IChat } from 'types/types'
-import './chats-page.css'
+import './personal-page.css'
 
-const ChatsPage = () => {
+const PersonalPage = () => {
   const [modal, showModal] = useState(false)
   const [joinModal, showJoinModal] = useState(false)
   const [chatsSearchRes, setChatSearchRes] = useState<IChat[]>([])
@@ -22,7 +24,7 @@ const ChatsPage = () => {
   const [joinChat, { isLoading: joinChatLoading, error: joinChatError }] = useJoinChatMutation()
   const [getMe, { isLoading: getMeLoading, error: getMeError }] = useGetMeMutation()
   const userChats = useAppSelector(state => state.userReducer.chats)
-  const userId = useAppSelector(state => state.userReducer.id)
+  const user = useAppSelector(state => state.userReducer)
   const navigate = useNavigate()
 
   const createChatHandle = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -48,15 +50,13 @@ const ChatsPage = () => {
 
     const formData = new FormData(e.currentTarget)
     const chatLink = formData.get('chatLink')?.toString()
-    const chatName = formData.get('chats-list')?.toString()
-    console.log(chatName)
 
     const chatId = chatLink ? chatLink.substring(chatLink.indexOf('_') + 1) : ''
     if (chatLink && chatLink !== '') {
       try {
-        if (userId !== null) {
+        if (user.id !== null) {
           await joinChat({
-            userId: +userId,
+            userId: +user.id,
             chatId: +chatId
           })
         }
@@ -100,7 +100,10 @@ const ChatsPage = () => {
         <Preloader />
       ) : (
         <>
-          <section className='chats-page__global'></section>
+          <section className='chats-page__global'>
+            <Logout />
+            <UserCabinet user={user} />
+          </section>
           <ChatsAside>
             {createChatLoading || getMeLoading ? (
               createChatError || getMeError ? (
@@ -181,4 +184,4 @@ const ChatsPage = () => {
   )
 }
 
-export default ChatsPage
+export default PersonalPage

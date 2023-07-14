@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { IMessage } from 'types/types'
 
 const initialState: IMessage = {
+  id: null,
   userId: null,
   chatId: null,
   text: null,

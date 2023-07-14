@@ -13,6 +13,7 @@ import { useLazyGetChatQuery } from 'services/chatService'
 import { useGetMeMutation } from 'services/userService'
 import { setMessage } from 'store/reducers/messagesSlice'
 import { IMessage } from 'types/types'
+import { v4 as uuidv4 } from 'uuid'
 import './chat-room.css'
 
 const ChatRoom: FC = () => {
@@ -28,6 +29,7 @@ const ChatRoom: FC = () => {
   const chatId = room ? room.substring(room.indexOf('_') + 1) : ''
 
   const allMessages = useLiveQuery(() => messagesTableIndexedDb.toArray(), [])
+  const filteredMessages = allMessages ? allMessages.filter(message => message.chatId === +chatId) : []
 
   const resizeTextArea = () => {
     const textarea = textareaRef.current
@@ -39,6 +41,21 @@ const ChatRoom: FC = () => {
 
   useEffect(() => {
     socket.emit('joinRoom', room)
+    if (filteredMessages.length > 0) {
+      const messComparison = {
+        chatId,
+        filteredMessages
+      }
+      socket.emit('getMessages', messComparison)
+    }
+
+    socket.on('getMessagesResult', result => {
+      if (result) {
+        return
+      } else {
+        result.map((mess: IMessage) => addMessageToIndexDb(mess))
+      }
+    })
 
     socket.on('reloadPage', () => {
       getChat(+chatId)
@@ -53,7 +70,7 @@ const ChatRoom: FC = () => {
       socket.off('connect')
       socket.off('onMessage')
     }
-  }, [room])
+  }, [room, filteredMessages])
 
   useEffect(resizeTextArea, [val])
 
@@ -69,6 +86,7 @@ const ChatRoom: FC = () => {
     const messageText: string | null = textareaRef.current?.value ?? null
 
     const message: IMessage = {
+      id: uuidv4(),
       userId: user.id,
       chatId: +chatId,
       text: messageText,
@@ -80,16 +98,14 @@ const ChatRoom: FC = () => {
     e.currentTarget.reset()
   }
 
-  const filteredMessages = allMessages?.filter(message => message.chatId === +chatId)
-
   return isLoading ? (
     <Preloader />
   ) : (
     <>
       <div className='chat-room__messages'>
         <Scrollbar style={{ width: '100%', height: '100%' }}>
-          {filteredMessages?.map(({ text, date, userId }, id) => (
-            <MessageCard text={text} user={user} date={date} chatId={+chatId} userId={userId} key={id} />
+          {filteredMessages?.map(({ text, date, userId, id }) => (
+            <MessageCard text={text} user={user} date={date} chatId={+chatId} userId={userId} id={id} key={id} />
           ))}
         </Scrollbar>
       </div>

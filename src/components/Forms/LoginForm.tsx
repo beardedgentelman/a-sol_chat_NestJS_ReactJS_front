@@ -4,13 +4,15 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useLoginMutation } from 'services/authService'
 import { ILogin, ILoginError } from 'types/types'
 
-import './forms.css'
+import { useAppSelector } from 'hooks/redux'
+
 import { formLoginValidation } from './validation'
+import './forms.css'
 
 const LoginForm = () => {
   const [formDispatched, setFormDispatched] = useState(false)
   const [formErrorsValidation, setFormErrorsValidation] = useState<ILoginError>({})
-
+  const user = useAppSelector(state => state.userReducer)
   const [login, { isLoading, error }] = useLoginMutation()
 
   const passwordRef = useRef<HTMLInputElement>(null)
@@ -19,7 +21,7 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (formDispatched && !isLoading && !error) {
-      navigate('/chats')
+      navigate(`/${user.name}`)
     }
   }, [formDispatched, isLoading, error, navigate])
 

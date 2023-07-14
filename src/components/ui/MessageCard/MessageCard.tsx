@@ -4,10 +4,9 @@ import './message-card.css'
 
 interface MessageCardProps extends IMessage {
   user: IUser
-  key: number
 }
 
-const MessageCard: FC<MessageCardProps> = ({ user, text, date, userId, chatId }, key) => {
+const MessageCard: FC<MessageCardProps> = ({ user, text, date, userId, chatId }) => {
   const extractTime = (dateString: string | null): string => {
     if (dateString) {
       const regex = /(\d{2}):(\d{2})/
@@ -24,7 +23,7 @@ const MessageCard: FC<MessageCardProps> = ({ user, text, date, userId, chatId },
   const formattedTime = extractTime(date || '')
 
   return (
-    <div key={key} className={`message-card ${userId === user.id ? 'me' : 'interlocutor'}`}>
+    <div className={`message-card ${userId === user.id ? 'me' : 'interlocutor'}`}>
       <h3 className='message-card__name'>{user.name}</h3>
       <div className='message-card__text-date'>
         <p className='message-card__text'>{text}</p>

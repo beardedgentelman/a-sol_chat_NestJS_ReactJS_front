@@ -8,8 +8,14 @@ export interface ILogin {
   email: string
   password: string
 }
+export interface IUpdate {
+  name: string
+  email: string
+  avatar: File | null
+}
 
 export type IRegistrationError = Partial<Required<IRegistration>>
+export type IUpdateError = Partial<Required<IUpdate>>
 export type ILoginError = Partial<Required<ILogin>>
 
 export interface IAuthState {
@@ -33,6 +39,7 @@ export interface IChat {
 }
 
 export interface IMessage {
+  id: string | null
   userId: number | null
   chatId: number | null
   text: string | null

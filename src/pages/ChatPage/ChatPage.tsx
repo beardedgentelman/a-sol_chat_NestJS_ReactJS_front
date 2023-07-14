@@ -1,5 +1,6 @@
 import ChatsAside from 'components/ChatAside/ChatAside'
 import ChatRoom from 'components/ChatRoom/ChatsRoom'
+import Logout from 'components/Logout/Logout'
 import BtnMain from 'components/ui/BtnMain/BtnMain'
 import ModalForm from 'components/ui/ModalForm/ModalForm'
 import Preloader from 'components/ui/Preloader/Preloader'
@@ -9,7 +10,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Scrollbar } from 'react-scrollbars-custom'
 import { useGetChatQuery, useJoinChatMutation, useLazyGetChatQuery } from 'services/chatService'
-import '../ChatsPage/chats-page.css'
+import '../PersonalPage/personal-page.css'
 
 const ChatPage = () => {
   const [modal, showModal] = useState(false)
@@ -46,6 +47,7 @@ const ChatPage = () => {
   return (
     <main className='chats-page'>
       <section className='chats-page__global'>
+        <Logout />
         <div
           className={`chat-aside__modal-wrapper ${modal ? 'active' : ''}`}
           onClick={event => {

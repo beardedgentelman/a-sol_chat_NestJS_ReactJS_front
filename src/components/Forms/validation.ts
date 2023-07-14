@@ -29,18 +29,6 @@ export const formRegistrationValidation = Yup.object().shape({
           .required('Confirm password is required')
     })
     .label('confirmPassword')
-  // TODO:Replace to user update
-  // file: Yup.mixed()
-  //   .label('file')
-  //   .when(['email', 'password'], {
-  //     is: (email: string, password: string) => email && password,
-  //     then: () =>
-  //       Yup.mixed().test('fileType', 'File must be an image', function (value: any) {
-  //         if (!value) return true
-  //         const supportedFormats = ['image/jpeg', 'image/png', 'image/gif']
-  //         return supportedFormats.includes((value as File).type)
-  //       })
-  //   })
 })
 export const formLoginValidation = Yup.object().shape({
   email: Yup.string().label('email').required('Email is required').email('Invalid email'),

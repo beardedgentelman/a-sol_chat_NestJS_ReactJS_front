@@ -13,9 +13,6 @@ import { formRegistrationValidation } from './validation'
 import './forms.css'
 
 const RegistrationForm: FC = () => {
-  // TODO: replace to update user form
-  // const [fileName, setFileName] = useState('Add avatar +')
-  // const [miniature, setMiniature] = useState('')
   const [formDispatched, setFormDispatched] = useState(false)
   const [formErrorsValidation, setFormErrorsValidation] = useState<IRegistrationError>({})
 
@@ -30,16 +27,6 @@ const RegistrationForm: FC = () => {
       navigate('/chats')
     }
   }, [formDispatched, isLoading, error, navigate])
-  // TODO: replace to update user form
-  // const fileRef = useRef<HTMLInputElement>(null)
-
-  // TODO: replace to update user form
-  // const handleFileChange = () => {
-  //   if (fileRef.current && fileRef.current.files && fileRef.current.files.length > 0) {
-  //     setFileName(fileRef.current?.files[0].name)
-  //     setMiniature(URL.createObjectURL(fileRef.current.files[0]))
-  //   }
-  // }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -53,10 +40,6 @@ const RegistrationForm: FC = () => {
     }
 
     formData.forEach((value, key) => {
-      // TODO: replace to update user form
-      // if (key === 'file' && value instanceof File && value.size === 0) {
-      //   return
-      // }
       formValues[key as keyof IRegistration] = value as string
     })
 
@@ -122,27 +105,6 @@ const RegistrationForm: FC = () => {
       {formErrorsValidation.confirmPassword && (
         <span className='form__error'>{formErrorsValidation.confirmPassword}</span>
       )}
-
-      {/* TODO:Replace to user update form */}
-      {/* <div className='form__avatar-field'>
-        <button
-          className='form__avatar-btn'
-          type='button'
-          onClick={() => {
-            fileRef.current?.click()
-          }}
-        >
-          {fileName}
-          <input ref={fileRef} onChange={handleFileChange} type='file' name='file' id='file' placeholder='Avatar' />
-        </button>
-        {miniature !== '' && (
-          <div className='form__avatar-field_wrapper'>
-            <img src={miniature} alt='Previous miniature' />
-          </div>
-        )}
-      </div>
-      {formErrorsValidation.file && <span className='form__error'>{formErrorsValidation.file}</span>} */}
-
       <BtnMain type='submit' className='form__submit' disabled={isLoading && true}>
         {!isLoading ? <span>Submit</span> : <span className='form__loading'></span>}
       </BtnMain>
